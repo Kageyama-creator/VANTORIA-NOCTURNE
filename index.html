@@ -1,939 +1,667 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vantoria Nocturne Empire</title>
-  
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vantoria Nocturne Empire</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #120306;
+            --card-bg: rgba(30, 8, 14, 0.88);
+            --gold-primary: #e5b869;
+            --gold-light: #f7e2a9;
+            --crimson-dark: #3a080e;
+            --crimson-accent: #7a0c16;
+            --text-light: #fcefe6;
+            --text-muted: #c9b09c;
+            --border-gold: linear-gradient(45deg, #b88a44, #e5b869, #b88a44);
+        }
 
-  <style>
-    /* RESET BASE */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    body {
-      font-family: 'Cinzel', serif;
-      background-color: #080204;
-      color: #e2d7c5;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+        body {
+            font-family: 'Playfair Display', serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(122, 12, 22, 0.45) 0%, transparent 75%),
+                radial-gradient(circle at 50% 100%, rgba(40, 5, 10, 0.9) 0%, transparent 80%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+        }
 
-    /* === AUDIO CONTROL BOX === */
-    .audio-control-box {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 10001;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 6px;
-    }
+        /* Loading Screen + Animasi Zoom Out & Fade Out */
+        #loader-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1c0307 0%, #3a080e 50%, #120306 100%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.9s ease, visibility 0.9s ease;
+            transform-origin: center center;
+        }
 
-    .audio-control {
-      background: rgba(18, 3, 6, 0.85);
-      border: 1px solid #dfb15b;
-      color: #dfb15b;
-      padding: 8px 14px;
-      border-radius: 30px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.75rem;
-      letter-spacing: 1px;
-      box-shadow: 0 0 15px rgba(223, 177, 91, 0.3);
-      backdrop-filter: blur(5px);
-      transition: all 0.3s ease;
-    }
+        /* Efek Zoom + Fade Out ketika kelas 'fade-zoom' diaktifkan */
+        #loader-wrapper.fade-zoom {
+            opacity: 0;
+            transform: scale(1.3);
+            visibility: hidden;
+            pointer-events: none;
+        }
 
-    .audio-control:hover {
-      background: #dfb15b;
-      color: #080204;
-    }
+        .loader-logo {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid var(--gold-primary);
+            box-shadow: 0 0 20px rgba(229, 184, 105, 0.6);
+            margin-bottom: 15px;
+            transition: transform 0.9s ease;
+        }
 
-    .bgm-select {
-      background: rgba(18, 3, 6, 0.9);
-      border: 1px solid #dfb15b;
-      color: #dfb15b;
-      padding: 6px 10px;
-      border-radius: 15px;
-      font-family: 'Cinzel', serif;
-      font-size: 0.7rem;
-      cursor: pointer;
-      outline: none;
-      backdrop-filter: blur(5px);
-    }
+        #loader-wrapper.fade-zoom .loader-logo {
+            transform: scale(1.2);
+        }
 
-    /* === STYLE GAMBAR LOGO === */
-    .brand-logo {
-      width: 110px;
-      height: 110px;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 2px solid #dfb15b;
-      box-shadow: 0 0 20px rgba(223, 177, 91, 0.5);
-      margin-bottom: 15px;
-    }
+        .loader-title {
+            font-family: 'Cinzel', serif;
+            color: var(--gold-primary);
+            font-size: 1.3rem;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 0 12px rgba(229, 184, 105, 0.6);
+        }
 
-    /* === 1. LOADING SCREEN === */
-    #loading-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at center, #2e0a11 0%, #120306 60%, #050102 100%);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      transition: opacity 0.8s ease, visibility 0.8s ease;
-    }
+        .progress-bar-container {
+            width: 240px;
+            height: 6px;
+            background: #220509;
+            border: 1px solid var(--gold-primary);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(229, 184, 105, 0.3);
+            margin-bottom: 15px;
+        }
 
-    #loading-screen.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #7a0c16, #e5b869);
+            animation: fillProgress 5s linear forwards;
+        }
 
-    .brand-container {
-      text-align: center;
-      padding: 0 20px;
-      animation: ambientGlow 3s infinite alternate ease-in-out;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+        .loading-quotes {
+            font-family: 'Cinzel', serif;
+            font-size: 0.82rem;
+            color: var(--gold-light);
+            font-style: italic;
+            text-align: center;
+            min-height: 24px;
+            transition: opacity 0.5s ease;
+        }
 
-    .brand-title {
-      font-size: 1.8rem;
-      font-weight: 600;
-      letter-spacing: 6px;
-      text-transform: uppercase;
-      background: linear-gradient(135deg, #fceabb 0%, #f8b500 50%, #e7c369 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 15px rgba(248, 181, 0, 0.3);
-    }
+        @keyframes fillProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
 
-    .brand-subtitle {
-      font-size: 3.2rem;
-      font-weight: 800;
-      letter-spacing: 10px;
-      text-transform: uppercase;
-      background: linear-gradient(135deg, #ffffff 0%, #dfb15b 50%, #996515 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 0 10px rgba(217, 162, 63, 0.4));
-      line-height: 1.1;
-    }
+        /* Main Container */
+        .container {
+            max-width: 800px;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease 0.3s, transform 1s ease 0.3s;
+            padding-bottom: 60px;
+        }
 
-    .ornament {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 15px 0 25px 0;
-      color: #dfb15b;
-      font-size: 1.2rem;
-      opacity: 0.8;
-    }
+        .container.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-    .ornament::before,
-    .ornament::after {
-      content: '';
-      width: 80px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, #dfb15b, transparent);
-      margin: 0 15px;
-    }
+        /* Header */
+        header {
+            text-align: center;
+            padding: 35px 20px 25px;
+            background: var(--card-bg);
+            border: 1px solid rgba(229, 184, 105, 0.4);
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 25px rgba(122, 12, 22, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
 
-    .progress-box {
-      width: 240px;
-      background-color: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(223, 177, 91, 0.3);
-      border-radius: 20px;
-      padding: 3px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
-    }
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--border-gold);
+        }
 
-    .progress-bar {
-      height: 6px;
-      width: 0%;
-      border-radius: 10px;
-      background: linear-gradient(90deg, #996515, #f8b500, #ffe699);
-      box-shadow: 0 0 10px rgba(248, 181, 0, 0.8);
-      transition: width 0.1s linear;
-    }
+        .logo-container {
+            margin-bottom: 18px;
+        }
 
-    .loading-status {
-      margin-top: 15px;
-      font-size: 0.85rem;
-      letter-spacing: 2px;
-      color: #c5a059;
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-    }
+        .empire-logo {
+            width: 130px;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid var(--gold-primary);
+            box-shadow: 0 0 20px rgba(229, 184, 105, 0.5), 0 0 10px rgba(122, 12, 22, 0.8);
+        }
 
-    .enter-btn {
-      display: none;
-      margin-top: 15px;
-      background: linear-gradient(135deg, #dfb15b, #996515);
-      color: #0b0204;
-      border: none;
-      padding: 10px 20px;
-      font-family: 'Cinzel', serif;
-      font-weight: bold;
-      letter-spacing: 2px;
-      border-radius: 20px;
-      cursor: pointer;
-      box-shadow: 0 0 15px rgba(223, 177, 91, 0.6);
-      animation: pulse 1.5s infinite;
-    }
+        .latin-title {
+            font-family: 'Cinzel', serif;
+            font-style: italic;
+            color: var(--gold-primary);
+            letter-spacing: 2px;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
 
-    @keyframes pulse {
-      0% { transform: scale(0.98); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(0.98); }
-    }
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px #000;
+        }
 
-    @keyframes ambientGlow {
-      0% { transform: scale(0.99); filter: brightness(0.9); }
-      100% { transform: scale(1.01); filter: brightness(1.15); }
-    }
-    /* === 2. HOME MENU PAGE === */
-    .home-container {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 20px 40px;
-      background: radial-gradient(circle at top, #2b080e 0%, #080204 80%);
-      text-align: center;
-    }
+        .welcome-text {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+        /* Audio Player */
+        .audio-section {
+            margin-top: 25px;
+            padding: 15px;
+            background: rgba(18, 3, 6, 0.7);
+            border: 1px solid rgba(229, 184, 105, 0.25);
+            border-radius: 8px;
+        }
 
-    .header-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+        .audio-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            color: var(--gold-primary);
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
 
-    .header-section h2 {
-      font-size: 1.2rem;
-      letter-spacing: 4px;
-      color: #c5a059;
-      text-transform: uppercase;
-    }
+        .track-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
 
-    .header-section h1 {
-      font-size: 2.5rem;
-      letter-spacing: 8px;
-      margin-bottom: 5px;
-      background: linear-gradient(135deg, #ffffff 0%, #dfb15b 60%, #996515 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+        .btn-track {
+            background: #220509;
+            border: 1px solid var(--gold-primary);
+            color: var(--gold-light);
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            font-family: 'Cinzel', serif;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-    /* GRID MENU BUTTONS DENGAN ANIMASI MUNCUL / DELAY */
-    .menu-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      width: 100%;
-      max-width: 380px;
-      margin-top: 15px;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.8s ease 0.4s, transform 0.8s ease 0.4s;
-      pointer-events: none;
-    }
+        .btn-track.active, .btn-track:hover {
+            background: var(--crimson-accent);
+            box-shadow: 0 0 10px rgba(229, 184, 105, 0.4);
+        }
 
-    body.ready .menu-grid {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
-    }
+        audio {
+            width: 100%;
+            height: 32px;
+            filter: invert(90%) sepia(20%) saturate(1000%) hue-rotate(330deg);
+        }
 
-    .menu-btn {
-      background: linear-gradient(135deg, rgba(46, 10, 17, 0.8), rgba(18, 3, 6, 0.9));
-      border: 1px solid #dfb15b;
-      color: #f1e4ce;
-      padding: 16px 20px;
-      font-family: 'Cinzel', serif;
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      border-radius: 4px;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), inset 0 0 8px rgba(223, 177, 91, 0.1);
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+        /* Navigation Menu Buttons */
+        .nav-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-bottom: 22px;
+        }
 
-    .menu-btn:active, .menu-btn:hover {
-      background: linear-gradient(135deg, #dfb15b, #996515);
-      color: #0b0204;
-      box-shadow: 0 0 20px rgba(223, 177, 91, 0.6);
-      transform: translateY(-2px);
-    }
+        .nav-btn {
+            background: rgba(30, 8, 14, 0.9);
+            border: 1px solid var(--gold-primary);
+            color: var(--gold-light);
+            padding: 12px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+        }
 
-    .menu-btn.accent {
-      background: linear-gradient(135deg, rgba(153, 101, 21, 0.6), rgba(46, 10, 17, 0.9));
-      border: 1px solid #f8b500;
-    }
+        .nav-btn:hover, .nav-btn.active {
+            background: var(--crimson-accent);
+            box-shadow: 0 0 15px rgba(229, 184, 105, 0.5);
+            transform: translateY(-2px);
+        }
 
-    /* === 3. POPUP MODAL SYSTEM === */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.88);
-      backdrop-filter: blur(8px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 10000;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.4s ease;
-      padding: 20px;
-    }
+        /* Sections & Page Switcher */
+        section {
+            background: var(--card-bg);
+            border: 1px solid rgba(229, 184, 105, 0.25);
+            border-radius: 10px;
+            padding: 22px;
+            margin-bottom: 22px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
 
-    .modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
+        .page-content {
+            display: none;
+            animation: fadeIn 0.5s ease forwards;
+        }
 
-    .modal-content {
-      background: linear-gradient(145deg, #1f060b, #0c0204);
-      border: 1px solid #dfb15b;
-      padding: 25px 20px;
-      border-radius: 8px;
-      text-align: center;
-      max-width: 440px;
-      width: 100%;
-      max-height: 85vh;
-      overflow-y: auto;
-      box-shadow: 0 0 30px rgba(223, 177, 91, 0.25);
-      transform: scale(0.8);
-      transition: transform 0.4s ease;
-    }
+        .page-content.active {
+            display: block;
+        }
 
-    .modal-overlay.active .modal-content {
-      transform: scale(1);
-    }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    .modal-title {
-      font-size: 1.3rem;
-      color: #dfb15b;
-      letter-spacing: 3px;
-      margin-bottom: 5px;
-      text-transform: uppercase;
-    }
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.25rem;
+            color: var(--gold-primary);
+            margin-bottom: 18px;
+            border-bottom: 1px solid rgba(229, 184, 105, 0.2);
+            padding-bottom: 8px;
+            letter-spacing: 1px;
+        }
 
-    /* STYLES BAGAN SILSILAH PENGURUS */
-    .hierarchy-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      margin: 20px 0;
-      width: 100%;
-    }
+        /* Rules List */
+        .rules-list { list-style: none; }
+        .rules-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+        .highlight-danger { color: #ff5555; font-weight: 600; }
 
-    .hierarchy-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(223, 177, 91, 0.3);
-      padding: 12px 16px;
-      border-radius: 6px;
-      width: 100%;
-      max-width: 320px;
-      position: relative;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    }
+        /* Admin Hierarchy */
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+        }
+        .admin-card {
+            background: rgba(18, 3, 6, 0.6);
+            padding: 14px;
+            border-radius: 6px;
+            border: 1px solid rgba(229, 184, 105, 0.3);
+            text-align: center;
+        }
+        .admin-role {
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            color: var(--gold-primary);
+            font-weight: 700;
+        }
+        .admin-name { font-size: 0.95rem; margin-top: 5px; color: #fff; }
 
-    .hierarchy-card.founder {
-      border: 2px solid #f8b500;
-      background: linear-gradient(135deg, rgba(153, 101, 21, 0.3), rgba(46, 10, 17, 0.6));
-    }
+        /* Member Grid */
+        .member-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+            gap: 10px;
+        }
+        .member-card {
+            background: rgba(18, 3, 6, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px dashed rgba(229, 184, 105, 0.25);
+            text-align: center;
+        }
+        .member-no { font-family: 'Cinzel', serif; font-size: 0.72rem; color: var(--gold-primary); }
+        .member-name { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
 
-    .hierarchy-card.empty {
-      border: 1px dashed rgba(223, 177, 91, 0.3);
-      opacity: 0.6;
-    }
+        /* Schedule */
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .time-badge {
+            background: rgba(18, 3, 6, 0.8);
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            border: 1px solid rgba(229, 184, 105, 0.3);
+            text-align: center;
+        }
 
-    .hierarchy-card h4 {
-      color: #ffffff;
-      font-size: 0.95rem;
-      letter-spacing: 1px;
-      margin-bottom: 2px;
-    }
+        /* Uniform Box */
+        .uniform-box {
+            text-align: center;
+            padding: 15px;
+            background: rgba(18, 3, 6, 0.6);
+            border: 1px solid rgba(229, 184, 105, 0.3);
+            border-radius: 8px;
+        }
+        .uniform-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid var(--gold-primary);
+            margin-top: 10px;
+        }
 
-    .hierarchy-card p {
-      color: #dfb15b;
-      font-size: 0.75rem;
-      font-weight: bold;
-    }
+        /* Back Floating Button (Pojok Kiri Bawah) */
+        .btn-back-floating {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: var(--crimson-accent);
+            color: var(--gold-light);
+            border: 1px solid var(--gold-primary);
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.8);
+            display: none;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .btn-back-floating:hover {
+            background: var(--gold-primary);
+            color: #000;
+            box-shadow: 0 0 15px rgba(229, 184, 105, 0.8);
+        }
 
-    .hierarchy-card span.status {
-      font-size: 0.7rem;
-      color: #b3a286;
-      font-style: italic;
-    }
-
-    .tree-line {
-      width: 2px;
-      height: 16px;
-      background: linear-gradient(to bottom, #dfb15b, transparent);
-    }
-
-    .sub-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      width: 100%;
-    }
-
-    .sub-grid .hierarchy-card {
-      padding: 10px;
-      text-align: center;
-    }
-
-    /* CARD LIST COMMON */
-    .card-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin: 15px 0;
-      text-align: left;
-    }
-
-    .member-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(223, 177, 91, 0.2);
-      padding: 10px 14px;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .member-info h4 {
-      color: #ffffff;
-      font-size: 0.95rem;
-      letter-spacing: 1px;
-    }
-
-    .member-info p {
-      color: #b3a286;
-      font-size: 0.75rem;
-      font-family: 'Playfair Display', serif;
-    }
-
-    .badge {
-      background: linear-gradient(135deg, #996515, #dfb15b);
-      color: #000;
-      font-size: 0.65rem;
-      font-weight: bold;
-      padding: 4px 8px;
-      border-radius: 12px;
-      text-transform: uppercase;
-    }
-
-    /* COUNTDOWN TIMER STYLING */
-    .countdown-box {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin: 20px 0;
-    }
-
-    .time-unit {
-      background: rgba(0, 0, 0, 0.5);
-      border: 1px solid #dfb15b;
-      padding: 8px 12px;
-      border-radius: 6px;
-      min-width: 60px;
-    }
-
-    .time-unit span {
-      display: block;
-      font-size: 1.3rem;
-      font-weight: bold;
-      color: #f8b500;
-    }
-
-    .time-unit label {
-      font-size: 0.6rem;
-      color: #a89478;
-      text-transform: uppercase;
-    }
-
-    /* FORM RECRUITMENT STYLING */
-    .recruit-form {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 15px;
-      text-align: left;
-    }
-
-    .recruit-form label {
-      font-size: 0.75rem;
-      color: #dfb15b;
-      letter-spacing: 1px;
-    }
-
-    .recruit-form input, .recruit-form select {
-      width: 100%;
-      padding: 10px;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(223, 177, 91, 0.4);
-      color: #fff;
-      border-radius: 4px;
-      font-family: inherit;
-    }
-
-    .close-btn {
-      background: transparent;
-      border: 1px solid #dfb15b;
-      color: #dfb15b;
-      padding: 10px 24px;
-      font-family: 'Cinzel', serif;
-      letter-spacing: 2px;
-      cursor: pointer;
-      border-radius: 4px;
-      transition: 0.3s;
-      margin-top: 15px;
-    }
-
-    .close-btn:hover, .close-btn:active {
-      background-color: #dfb15b;
-      color: #0b0204;
-    }
-
-    @media (max-width: 600px) {
-      .brand-logo { width: 90px; height: 90px; }
-      .brand-title { font-size: 1.2rem; }
-      .brand-subtitle { font-size: 2.2rem; }
-      .header-section h1 { font-size: 1.8rem; }
-      .menu-btn { font-size: 0.9rem; padding: 14px 16px; }
-      .sub-grid { grid-template-columns: 1fr; }
-    }
-  </style>
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 25px 10px 0;
+            border-top: 1px solid rgba(229, 184, 105, 0.2);
+        }
+        .footer-latin {
+            font-family: 'Cinzel', serif;
+            font-style: italic;
+            color: var(--gold-primary);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
-<body id="main-body">
+<body>
 
-  <!-- ELEMENT AUDIO & TOMBOL KONTROL -->
-  <audio id="bgm" loop preload="auto">
-    <source id="bgm-source" src="bgm1.mp3" type="audio/mpeg">
-  </audio>
-
-  <div class="audio-control-box">
-    <button class="audio-control" id="audio-btn">
-      <span id="audio-icon">🎵</span> <span id="audio-status">PLAY MUSIC</span>
-    </button>
-    
-    <select id="bgm-selector" class="bgm-select">
-      <option value="song1">🌸 Mystic Forest (Song 1)</option>
-      <option value="song2">🏰 Vibes Kerajaan (Song 2)</option>
-      <option value="song3">👑 Vibes Berwibawa (Song 3)</option>
-    </select>
-  </div>
-
-  <!-- 1. LOADING SCREEN (5 DETIK) -->
-  <div id="loading-screen">
-    <div class="brand-container">
-      <img src="logo.jpg" class="brand-logo" alt="Logo Empire">
-      <div class="brand-title">Vantoria Nocturne</div>
-      <div class="brand-subtitle">EMPIRE</div>
-      <div class="ornament">❖</div>
-      <div class="progress-box" id="progress-box">
-        <div class="progress-bar" id="progress-bar"></div>
-      </div>
-      <div class="loading-status" id="loading-text">Awakening the Realm... 0%</div>
-      <button class="enter-btn" id="enter-btn">ENTER REALM</button>
-    </div>
-  </div>
-
-  <!-- 2. HALAMAN HOME / MENU UTAMA -->
-  <div class="home-container">
-    <div class="header-section">
-      <img src="logo.jpg" class="brand-logo" alt="Logo Empire">
-      <h2>Welcome To</h2>
-      <h1>VANTORIA NOCTURNE</h1>
-      <div class="ornament">❖</div>
+    <!-- LOADING SCREEN -->
+    <div id="loader-wrapper">
+        <img src="logo.jpg" alt="Squad Logo" class="loader-logo">
+        <div class="loader-title">⚔️ VANTORIA NOCTURNE 🌟</div>
+        <div class="progress-bar-container">
+            <div class="progress-bar"></div>
+        </div>
+        <div id="loading-quote" class="loading-quotes">"Memasuki Gerbang Kekaisaran Nocturne..."</div>
     </div>
 
-    <!-- TOMBOL MENU INTERAKTIF -->
-    <div class="menu-grid" id="menu-grid">
-      <button class="menu-btn" id="btn-uniform">
-        <span>Uniform Empire</span>
-        <span class="icon">⚔️</span>
-      </button>
+    <!-- MAIN CONTENT -->
+    <div class="container" id="main-content">
 
-      <button class="menu-btn" id="btn-event">
-        <span>Jadwal Event</span>
-        <span class="icon">📜</span>
-      </button>
+        <!-- HEADER -->
+        <header>
+            <div class="logo-container">
+                <img src="logo.jpg" alt="Vantoria Logo" class="empire-logo">
+            </div>
+            
+            <div class="latin-title">📜 Salve, Bene Venisti Ad Imperium</div>
+            <h1>⚔️ VANTORIA NOCTURNE EMPIRE 🌟</h1>
+            <p class="welcome-text">
+                Selamat datang dan selamat bergabung ke dalam SQ kami! Kami sangat senang jika kalian tertarik untuk bergabung bersama kami, Squad Vantoria Nocturne Empire.
+            </p>
 
-      <button class="menu-btn" id="btn-pengurus">
-        <span>Silsilah Pengurus</span>
-        <span class="icon">🛡️</span>
-      </button>
+            <!-- AUDIO CONTROLLER -->
+            <div class="audio-section">
+                <div class="audio-title">🎼 BGM EMPIRE ATMOSPHERE</div>
+                <div class="track-buttons">
+                    <button class="btn-track active" onclick="changeTrack('bgm1.mp3', this)">Track I</button>
+                    <button class="btn-track" onclick="changeTrack('bgm2.mp3', this)">Track II</button>
+                    <button class="btn-track" onclick="changeTrack('bgm3.mp3', this)">Track III</button>
+                </div>
+                <audio id="bgm-player" src="bgm1.mp3" controls loop></audio>
+            </div>
+        </header>
 
-      <button class="menu-btn" id="btn-anggota">
-        <span>Daftar Anggota</span>
-        <span class="icon">👑</span>
-      </button>
+        <!-- NAVIGATION MENU BUTTONS -->
+        <div class="nav-menu">
+            <button class="nav-btn" onclick="openPage('admin-page')">🪶 Admin</button>
+            <button class="nav-btn" onclick="openPage('member-page')">🛡️ Members</button>
+            <button class="nav-btn" onclick="openPage('schedule-page')">📝 Patrol</button>
+            <button class="nav-btn" onclick="openPage('uniform-page')">🥋 Uniform</button>
+        </div>
 
-      <button class="menu-btn accent" id="btn-join">
-        <span>Join Empire</span>
-        <span class="icon">⚡</span>
-      </button>
+        <!-- MAIN PAGE: TITAH & LARANGAN (DEFAULT) -->
+        <div id="main-rules-page">
+            <section>
+                <h2>📃 Titah & Larangan Wajib</h2>
+                <ul class="rules-list">
+                    <li>📌 Anggota baru diwajibkan untuk mengisi kartu perkenalan diri (intro).</li>
+                    <li>🔞 Umur anggota diwajibkan 10th keatas (+).</li>
+                    <li>🥋 Anggota wajib membuat uniform SQ.</li>
+                    <li>⚔️ Semua anggota diwajibkan untuk aktif/sering mengikuti kegiatan patrol.</li>
+                    <li>📝 Jika dirasa tidak bisa mengikuti kegiatan, berikan alasan yang jelas!</li>
+                    <li>🤝 Bersikap sopan dan bertanggung jawab.</li>
+                    <li>💬 Toxic sewajarnya.</li>
+                    <li>🚫 No copyright.</li>
+                    <li>📷 Jika ingin mengirim foto, wajib menggunakan fitur 1x lihat.</li>
+                    <li>⚖️ Dilarang membuat keributan dan rasisme.</li>
+                    <li>🚪 Left? Berikan alasan yang jelas.</li>
+                    <li><span class="highlight-danger">❌ DILARANG KERAS</span> membagikan konten dewasa 18+/LGBT.</li>
+                    <li>🔒 Tautan unif bersifat terbatas dan tidak boleh disebarluaskan tanpa izin.</li>
+                </ul>
+            </section>
+        </div>
+        <!-- PAGE 1: ADMIN -->
+        <div id="admin-page" class="page-content">
+            <section>
+                <h2>🪶 Jajaran Admin & Pangkat Kehormatan</h2>
+                <div class="admin-grid">
+                    <div class="admin-card">
+                        <div class="admin-role">🌟 OWNER</div>
+                        <div class="admin-name">Sellyn (07559)</div>
+                    </div>
+                    <div class="admin-card">
+                        <div class="admin-role">⚒️ STAFF¹</div>
+                        <div class="admin-name">Yuna (50507)</div>
+                    </div>
+                    <div class="admin-card">
+                        <div class="admin-role">⚒️ STAFF²</div>
+                        <div class="admin-name">Kage (16224)</div>
+                    </div>
+                    <div class="admin-card">
+                        <div class="admin-role">🖋️ T-EDITOR¹</div>
+                        <div class="admin-name">Asha (7609)</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- PAGE 2: MEMBERS (41 SLOTS) -->
+        <div id="member-page" class="page-content">
+            <section>
+                <h2>🛡️ Anggota / Member (41 Slots)</h2>
+                <div id="member-grid" class="member-grid"></div>
+            </section>
+        </div>
+
+        <!-- PAGE 3: SCHEDULE -->
+        <div id="schedule-page" class="page-content">
+            <section>
+                <h2>📝 Jadwal Patrol</h2>
+                <p style="color: var(--gold-primary); margin-bottom: 8px; font-family: 'Cinzel', serif;"><strong>HARI:</strong> SABTU - MINGGU (LIBUR)</p>
+                <div class="schedule-grid">
+                    <div class="time-badge">🇮🇩 19.10 WIB</div>
+                    <div class="time-badge">🇮🇩 20.10 WITA</div>
+                    <div class="time-badge">🇮🇩 21.10 WIT</div>
+                    <div class="time-badge">🇲🇾 22.10 MST</div>
+                </div>
+            </section>
+        </div>
+
+        <!-- PAGE 4: UNIFORM -->
+        <div id="uniform-page" class="page-content">
+            <section>
+                <h2>🥋 Uniform Vantoria Empire</h2>
+                <div class="uniform-box">
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Ketentuan dan tampilan seragam resmi anggota SQ Vantoria Nocturne Empire.</p>
+                    <img src="unif.jpg" alt="Uniform Squad" class="uniform-img" onerror="this.src='https://via.placeholder.com/600x350/1e080e/e5b869?text=Uniform+Vantoria+Empire'">
+                </div>
+            </section>
+        </div>
+
+        <!-- FOOTER -->
+        <footer>
+            <p class="footer-latin">🏰 Valete, Et Bene Adiynxistis Imperio</p>
+            <p style="font-family: 'Cinzel', serif; font-size: 0.85rem; color: #fff;">⚔️ VANTORIA NOCTURNE EMPIRE 🌟</p>
+        </footer>
+
     </div>
-  </div>
 
-  <!-- 3. MODAL UNIFORM SHOWCASE -->
-  <div class="modal-overlay" id="modal-uniform">
-    <div class="modal-content">
-      <div class="modal-title">Uniform Empire</div>
-      <div class="ornament" style="margin: 5px 0;">❖</div>
-      <div class="card-list">
-        <div class="member-card">
-          <div class="member-info">
-            <h4>Pakaian Resmi (Formal)</h4>
-            <p>Setelan Jas / Gaun Gotik Hitam & Elemen Emas</p>
-          </div>
-          <span class="badge">Wajib</span>
-        </div>
-        <div class="member-card">
-          <div class="member-info">
-            <h4>Pakaian Pertempuran / Casual</h4>
-            <p>Jubah Hitam VNE / Jaket Tema Dark Red</p>
-          </div>
-          <span class="badge">Opsional</span>
-        </div>
-      </div>
-      <button class="close-btn" id="close-uniform">TUTUP</button>
-    </div>
-  </div>
+    <!-- FLOATING BACK BUTTON -->
+    <button id="back-btn" class="btn-back-floating" onclick="closePages()">⬅ Kembali</button>
 
-  <!-- 4. MODAL JADWAL EVENT & COUNTDOWN -->
-  <div class="modal-overlay" id="modal-event">
-    <div class="modal-content">
-      <div class="modal-title">Event Mendatang</div>
-      <div class="ornament" style="margin: 5px 0;">❖</div>
-      <p style="font-size: 0.85rem; color: #dfb15b;">Grand Assembly & Ritual Empire</p>
-      
-      <div class="countdown-box">
-        <div class="time-unit"><span id="cd-days">03</span><label>Hari</label></div>
-        <div class="time-unit"><span id="cd-hours">12</span><label>Jam</label></div>
-        <div class="time-unit"><span id="cd-mins">45</span><label>Menit</label></div>
-      </div>
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Quotes Berubah Saat Loading
+        const quotes = [
+            '"Memasuki Gerbang Kekaisaran Nocturne..."',
+            '"Mempersiapkan Titah & Hukum Empire..."',
+            '"Menyelaraskan Musik Kehormatan..."',
+            '"Menyambut Ksatria Baru Vantoria..."'
+        ];
+        let quoteIndex = 0;
+        const quoteEl = document.getElementById('loading-quote');
 
-      <p style="font-size: 0.8rem; color: #b3a286; font-style: italic;">Lokasi: Discord / Realm VNE</p>
-      <button class="close-btn" id="close-event">TUTUP</button>
-    </div>
-  </div>
+        const quoteInterval = setInterval(() => {
+            quoteIndex = (quoteIndex + 1) % quotes.length;
+            if(quoteEl) {
+                quoteEl.style.opacity = '0';
+                setTimeout(() => {
+                    quoteEl.textContent = quotes[quoteIndex];
+                    quoteEl.style.opacity = '1';
+                }, 300);
+            }
+        }, 1200);
 
-  <!-- 5. MODAL DAFTAR SILSILAH PENGURUS -->
-  <div class="modal-overlay" id="modal-pengurus">
-    <div class="modal-content">
-      <div class="modal-title">Silsilah Pengurus</div>
-      <div class="ornament" style="margin: 5px 0;">❖</div>
-      
-      <div class="hierarchy-container">
-        <!-- TIER 1: FOUNDER -->
-        <div class="hierarchy-card founder">
-          <p>FOUNDER EMPIRE</p>
-          <h4>High King / Leader</h4>
-          <span class="status">Pemimpin Utama VNE</span>
-        </div>
+        // Anti-Stuck Timer Loading Page & Zoom-Fade Out Animation
+        function finishLoading() {
+            clearInterval(quoteInterval);
+            const loader = document.getElementById('loader-wrapper');
+            const content = document.getElementById('main-content');
+            
+            // Tambahkan class animasi zoom out & fade out
+            loader.classList.add('fade-zoom');
+            content.classList.add('loaded');
+        }
 
-        <div class="tree-line"></div>
+        // Eksekusi tepat 5 detik tanpa peduli file eksternal belum kelar
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(finishLoading, 5000);
 
-        <!-- TIER 2: CO-FOUNDER (KOSONG) -->
-        <div class="hierarchy-card empty">
-          <p style="color: #a89478;">CO-FOUNDER</p>
-          <h4 style="color: #888;">[ Posisimih Kosong ]</h4>
-          <span class="status">Belum Ditentukan</span>
-        </div>
+            // Generate 41 Member Slots
+            const memberGrid = document.getElementById('member-grid');
+            for (let i = 1; i <= 41; i++) {
+                const card = document.createElement('div');
+                card.className = 'member-card';
+                card.innerHTML = `
+                    <div class="member-no">MEMBER #${i}</div>
+                    <div class="member-name">Menyusul</div>
+                `;
+                memberGrid.appendChild(card);
+            }
 
-        <div class="tree-line"></div>
-
-        <!-- TIER 3: PENGURUS LAINNYA -->
-        <div class="sub-grid">
-          <div class="hierarchy-card">
-            <p>PENGURUS #1</p>
-            <h4>Commander I</h4>
-            <span class="status">Divisi Keamanan</span>
-          </div>
-          <div class="hierarchy-card">
-            <p>PENGURUS #2</p>
-            <h4>Commander II</h4>
-            <span class="status">Divisi Acara</span>
-          </div>
-          <div class="hierarchy-card">
-            <p>PENGURUS #3</p>
-            <h4>Pengurus #03</h4>
-            <span class="status">Divisi Hubungan</span>
-          </div>
-          <div class="hierarchy-card">
-            <p>PENGURUS #4</p>
-            <h4>Pengurus #04</h4>
-            <span class="status">Divisi Media</span>
-          </div>
-        </div>
-      </div>
-
-      <button class="close-btn" id="close-pengurus">TUTUP</button>
-    </div>
-  </div>
-
-  <!-- 6. MODAL DAFTAR ANGGOTA -->
-  <div class="modal-overlay" id="modal-anggota">
-    <div class="modal-content">
-      <div class="modal-title">Daftar Anggota</div>
-      <div class="ornament" style="margin: 5px 0;">❖</div>
-      <div class="card-list">
-        <div class="member-card">
-          <div class="member-info">
-            <h4>Ksatria Nocturne #01</h4>
-            <p>Status: Aktif</p>
-          </div>
-          <span class="badge">Member</span>
-        </div>
-        <div class="member-card">
-          <div class="member-info">
-            <h4>Ksatria Nocturne #02</h4>
-            <p>Status: Aktif</p>
-          </div>
-          <span class="badge">Member</span>
-        </div>
-      </div>
-      <button class="close-btn" id="close-anggota">TUTUP</button>
-    </div>
-  </div>
-
-  <!-- 7. MODAL JOIN RECRUITMENT -->
-  <div class="modal-overlay" id="modal-join">
-    <div class="modal-content">
-      <div class="modal-title">Pendaftaran Anggota</div>
-      <div class="ornament" style="margin: 5px 0;">❖</div>
-      
-      <form class="recruit-form" id="recruit-form">
-        <div>
-          <label>NAMA / NICKNAME</label>
-          <input type="text" required placeholder="Masukkan nama..." />
-        </div>
-        <div>
-          <label>DIVISI YANG DIMINATI</label>
-          <select>
-            <option>Divisi Pengurus</option>
-            <option>Divisi Ksatria (Anggota)</option>
-            <option>Divisi Event & Kreatif</option>
-          </select>
-        </div>
-        <button type="submit" class="close-btn" style="width: 100%; margin-top: 10px;">KIRIM FORM</button>
-      </form>
-
-      <button class="close-btn" id="close-join" style="border: none; font-size: 0.75rem;">BATAL</button>
-    </div>
-  </div>
-  <!-- JAVASCRIPT LOGIC -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const playlist = {
-        song1: "bgm1.mp3",
-        song2: "bgm2.mp3",
-        song3: "bgm3.mp3"
-      };
-
-      const bgm = document.getElementById('bgm');
-      const bgmSource = document.getElementById('bgm-source');
-      const audioIcon = document.getElementById('audio-icon');
-      const audioStatus = document.getElementById('audio-status');
-      const audioBtn = document.getElementById('audio-btn');
-      const bgmSelector = document.getElementById('bgm-selector');
-      const mainBody = document.getElementById('main-body');
-
-      const progressBar = document.getElementById("progress-bar");
-      const loadingText = document.getElementById("loading-text");
-      const enterBtn = document.getElementById("enter-btn");
-      const progressBox = document.getElementById("progress-box");
-      const loadingScreen = document.getElementById("loading-screen");
-
-      let isPlaying = false;
-      let hasInteracted = false;
-
-      function playAudio() {
-        if (!bgm) return;
-        bgm.play().then(function () {
-          isPlaying = true;
-          if (audioIcon) audioIcon.innerText = "🔊";
-          if (audioStatus) audioStatus.innerText = "PAUSE MUSIC";
-        }).catch(function (err) {
-          console.log("Autoplay diblokir browser:", err);
-          isPlaying = false;
-          if (audioIcon) audioIcon.innerText = "🎵";
-          if (audioStatus) audioStatus.innerText = "PLAY MUSIC";
+            // BGM Play Bypasser
+            const audio = document.getElementById('bgm-player');
+            document.body.addEventListener('click', function() {
+                if (audio.paused) {
+                    audio.play().catch(() => {});
+                }
+            }, { once: true });
         });
-      }
 
-      function startAudioOnFirstTouch() {
-        if (!hasInteracted) {
-          hasInteracted = true;
-          playAudio();
+        // Tab & Page Navigation System
+        function openPage(pageId) {
+            document.getElementById('main-rules-page').style.display = 'none';
+            
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(page => page.classList.remove('active'));
+
+            document.getElementById(pageId).classList.add('active');
+            document.getElementById('back-btn').style.display = 'block';
+
+            window.scrollTo({ top: 300, behavior: 'smooth' });
         }
-      }
 
-      function toggleAudio(e) {
-        if (e) e.stopPropagation();
-        hasInteracted = true;
-        if (isPlaying) {
-          bgm.pause();
-          if (audioIcon) audioIcon.innerText = "🎵";
-          if (audioStatus) audioStatus.innerText = "PLAY MUSIC";
-          isPlaying = false;
-        } else {
-          playAudio();
+        function closePages() {
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(page => page.classList.remove('active'));
+
+            document.getElementById('main-rules-page').style.display = 'block';
+            document.getElementById('back-btn').style.display = 'none';
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-      }
 
-      function changeTrack(key) {
-        const newSrc = playlist[key];
-        if (newSrc && bgmSource && bgm) {
-          bgmSource.src = newSrc;
-          bgm.load();
-          if (isPlaying) {
-            playAudio();
-          }
+        // Change BGM Track
+        function changeTrack(trackSrc, btn) {
+            const player = document.getElementById('bgm-player');
+            const buttons = document.querySelectorAll('.btn-track');
+            
+            buttons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            player.src = trackSrc;
+            player.play().catch(() => {});
         }
-      }
-
-      /* LOGIC TRANSISI / DELAY MENU MUNCUL */
-      function dismissLoading() {
-        if (loadingScreen) {
-          loadingScreen.classList.add("hidden");
-        }
-        startAudioOnFirstTouch();
-
-        // Delay kecil sebelum menu aktif untuk cegah mis-click
-        setTimeout(function() {
-          if (mainBody) mainBody.classList.add("ready");
-        }, 300);
-      }
-
-      // Event Listeners Suara
-      if (mainBody) mainBody.addEventListener('click', startAudioOnFirstTouch);
-      if (audioBtn) audioBtn.addEventListener('click', toggleAudio);
-      if (bgmSelector) {
-        bgmSelector.addEventListener('change', function () {
-          changeTrack(bgmSelector.value);
-        });
-      }
-
-      // Event Listener Loading Screen
-      if (loadingScreen) loadingScreen.addEventListener('click', dismissLoading);
-      if (enterBtn) enterBtn.addEventListener('click', dismissLoading);
-
-      // Animation Timer Loading 5 Detik
-      let progress = 0;
-      const totalDuration = 5000;
-      const intervalTime = 50;
-      const increment = (intervalTime / totalDuration) * 100;
-
-      const interval = setInterval(function () {
-        progress += increment;
-        if (progress >= 100) {
-          progress = 100;
-          clearInterval(interval);
-          if (loadingText) loadingText.innerText = "Realm Ready!";
-          if (progressBox) progressBox.style.display = "none";
-          if (enterBtn) enterBtn.style.display = "inline-block";
-
-          setTimeout(function () {
-            dismissLoading();
-          }, 1000);
-        } else {
-          if (progressBar) progressBar.style.width = progress + "%";
-          if (loadingText) loadingText.innerText = "Awakening the Realm... " + Math.floor(progress) + "%";
-        }
-      }, intervalTime);
-
-      // Helper Fungsi Modal Popup
-      function openModal(id) {
-        const modal = document.getElementById(id);
-        if (modal) modal.classList.add('active');
-      }
-
-      function closeModal(id) {
-        const modal = document.getElementById(id);
-        if (modal) modal.classList.remove('active');
-      }
-
-      // Assign Modal Trigger Buttons
-      const btnUniform = document.getElementById('btn-uniform');
-      if (btnUniform) btnUniform.addEventListener('click', function () { openModal('modal-uniform'); });
-
-      const btnEvent = document.getElementById('btn-event');
-      if (btnEvent) btnEvent.addEventListener('click', function () { openModal('modal-event'); });
-
-      const btnPengurus = document.getElementById('btn-pengurus');
-      if (btnPengurus) btnPengurus.addEventListener('click', function () { openModal('modal-pengurus'); });
-
-      const btnAnggota = document.getElementById('btn-anggota');
-      if (btnAnggota) btnAnggota.addEventListener('click', function () { openModal('modal-anggota'); });
-
-      const btnJoin = document.getElementById('btn-join');
-      if (btnJoin) btnJoin.addEventListener('click', function () { openModal('modal-join'); });
-
-      // Assign Modal Close Buttons
-      const closeUniform = document.getElementById('close-uniform');
-      if (closeUniform) closeUniform.addEventListener('click', function () { closeModal('modal-uniform'); });
-
-      const closeEvent = document.getElementById('close-event');
-      if (closeEvent) closeEvent.addEventListener('click', function () { closeModal('modal-event'); });
-
-      const closePengurus = document.getElementById('close-pengurus');
-      if (closePengurus) closePengurus.addEventListener('click', function () { closeModal('modal-pengurus'); });
-
-      const closeAnggota = document.getElementById('close-anggota');
-      if (closeAnggota) closeAnggota.addEventListener('click', function () { closeModal('modal-anggota'); });
-
-      const closeJoin = document.getElementById('close-join');
-      if (closeJoin) closeJoin.addEventListener('click', function () { closeModal('modal-join'); });
-
-      // Form Recruitment Submit Event
-      const recruitForm = document.getElementById('recruit-form');
-      if (recruitForm) {
-        recruitForm.addEventListener('submit', function (e) {
-          e.preventDefault();
-          alert("Permohonan Anda telah terkirim ke Pengurus Vantoria Nocturne Empire!");
-          closeModal('modal-join');
-        });
-      }
-    });
-  </script>
-
+    </script>
 </body>
 </html>
