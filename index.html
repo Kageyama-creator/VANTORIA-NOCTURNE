@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vantoria Nocturne Empire</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+
+  <style>
+    /* RESET BASE */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Cinzel', serif;
+      background-color: #080204;
+      color: #e2d7c5;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* === AUDIO CONTROL BOX === */
+    .audio-control-box {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10001;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .audio-control {
+      background: rgba(18, 3, 6, 0.85);
+      border: 1px solid #dfb15b;
+      color: #dfb15b;
+      padding: 8px 14px;
+      border-radius: 30px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      box-shadow: 0 0 15px rgba(223, 177, 91, 0.3);
+      backdrop-filter: blur(5px);
+      transition: all 0.3s ease;
+    }
+
+    .audio-control:hover {
+      background: #dfb15b;
+      color: #080204;
+    }
+
+    .bgm-select {
+      background: rgba(18, 3, 6, 0.9);
+      border: 1px solid #dfb15b;
+      color: #dfb15b;
+      padding: 6px 10px;
+      border-radius: 15px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      cursor: pointer;
+      outline: none;
+      backdrop-filter: blur(5px);
+    }
+
+    /* === STYLE GAMBAR LOGO === */
+    .brand-logo {
+      width: 110px;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #dfb15b;
+      box-shadow: 0 0 20px rgba(223, 177, 91, 0.5);
+      margin-bottom: 15px;
+    }
+
+    /* === 1. LOADING SCREEN === */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, #2e0a11 0%, #120306 60%, #050102 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    #loading-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .brand-container {
+      text-align: center;
+      padding: 0 20px;
+      animation: ambientGlow 3s infinite alternate ease-in-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .brand-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #fceabb 0%, #f8b500 50%, #e7c369 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 15px rgba(248, 181, 0, 0.3);
+    }
+
+    .brand-subtitle {
+      font-size: 3.2rem;
+      font-weight: 800;
+      letter-spacing: 10px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff 0%, #dfb15b 50%, #996515 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 10px rgba(217, 162, 63, 0.4));
+      line-height: 1.1;
+    }
+
+    .ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 15px 0 25px 0;
+      color: #dfb15b;
+      font-size: 1.2rem;
+      opacity: 0.8;
+    }
+
+    .ornament::before,
+    .ornament::after {
+      content: '';
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #dfb15b, transparent);
+      margin: 0 15px;
+    }
+
+    .progress-box {
+      width: 240px;
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(223, 177, 91, 0.3);
+      border-radius: 20px;
+      padding: 3px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+    }
+
+    .progress-bar {
+      height: 6px;
+      width: 0%;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #996515, #f8b500, #ffe699);
+      box-shadow: 0 0 10px rgba(248, 181, 0, 0.8);
+      transition: width 0.1s linear;
+    }
+
+    .loading-status {
+      margin-top: 15px;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      color: #c5a059;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+    }
+
+    .enter-btn {
+      display: none;
+      margin-top: 15px;
+      background: linear-gradient(135deg, #dfb15b, #996515);
+      color: #0b0204;
+      border: none;
+      padding: 10px 20px;
+      font-family: 'Cinzel', serif;
+      font-weight: bold;
+      letter-spacing: 2px;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(223, 177, 91, 0.6);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.98); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(0.98); }
+    }
+
+    @keyframes ambientGlow {
+      0% { transform: scale(0.99); filter: brightness(0.9); }
+      100% { transform: scale(1.01); filter: brightness(1.15); }
+    }
+    /* === 2. HOME MENU PAGE === */
+    .home-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px 40px;
+      background: radial-gradient(circle at top, #2b080e 0%, #080204 80%);
+      text-align: center;
+    }
+
+    .header-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .header-section h2 {
+      font-size: 1.2rem;
+      letter-spacing: 4px;
+      color: #c5a059;
+      text-transform: uppercase;
+    }
+
+    .header-section h1 {
+      font-size: 2.5rem;
+      letter-spacing: 8px;
+      margin-bottom: 5px;
+      background: linear-gradient(135deg, #ffffff 0%, #dfb15b 60%, #996515 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* GRID MENU BUTTONS DENGAN ANIMASI MUNCUL / DELAY */
+    .menu-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      max-width: 380px;
+      margin-top: 15px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease 0.4s, transform 0.8s ease 0.4s;
+      pointer-events: none;
+    }
+
+    body.ready .menu-grid {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .menu-btn {
+      background: linear-gradient(135deg, rgba(46, 10, 17, 0.8), rgba(18, 3, 6, 0.9));
+      border: 1px solid #dfb15b;
+      color: #f1e4ce;
+      padding: 16px 20px;
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), inset 0 0 8px rgba(223, 177, 91, 0.1);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .menu-btn:active, .menu-btn:hover {
+      background: linear-gradient(135deg, #dfb15b, #996515);
+      color: #0b0204;
+      box-shadow: 0 0 20px rgba(223, 177, 91, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .menu-btn.accent {
+      background: linear-gradient(135deg, rgba(153, 101, 21, 0.6), rgba(46, 10, 17, 0.9));
+      border: 1px solid #f8b500;
+    }
+
+    /* === 3. POPUP MODAL SYSTEM === */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(8px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background: linear-gradient(145deg, #1f060b, #0c0204);
+      border: 1px solid #dfb15b;
+      padding: 25px 20px;
+      border-radius: 8px;
+      text-align: center;
+      max-width: 440px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 0 30px rgba(223, 177, 91, 0.25);
+      transform: scale(0.8);
+      transition: transform 0.4s ease;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: scale(1);
+    }
+
+    .modal-title {
+      font-size: 1.3rem;
+      color: #dfb15b;
+      letter-spacing: 3px;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+
+    /* STYLES BAGAN SILSILAH PENGURUS */
+    .hierarchy-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+      width: 100%;
+    }
+
+    .hierarchy-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(223, 177, 91, 0.3);
+      padding: 12px 16px;
+      border-radius: 6px;
+      width: 100%;
+      max-width: 320px;
+      position: relative;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .hierarchy-card.founder {
+      border: 2px solid #f8b500;
+      background: linear-gradient(135deg, rgba(153, 101, 21, 0.3), rgba(46, 10, 17, 0.6));
+    }
+
+    .hierarchy-card.empty {
+      border: 1px dashed rgba(223, 177, 91, 0.3);
+      opacity: 0.6;
+    }
+
+    .hierarchy-card h4 {
+      color: #ffffff;
+      font-size: 0.95rem;
+      letter-spacing: 1px;
+      margin-bottom: 2px;
+    }
+
+    .hierarchy-card p {
+      color: #dfb15b;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+
+    .hierarchy-card span.status {
+      font-size: 0.7rem;
+      color: #b3a286;
+      font-style: italic;
+    }
+
+    .tree-line {
+      width: 2px;
+      height: 16px;
+      background: linear-gradient(to bottom, #dfb15b, transparent);
+    }
+
+    .sub-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .sub-grid .hierarchy-card {
+      padding: 10px;
+      text-align: center;
+    }
+
+    /* CARD LIST COMMON */
+    .card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 15px 0;
+      text-align: left;
+    }
+
+    .member-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(223, 177, 91, 0.2);
+      padding: 10px 14px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .member-info h4 {
+      color: #ffffff;
+      font-size: 0.95rem;
+      letter-spacing: 1px;
+    }
+
+    .member-info p {
+      color: #b3a286;
+      font-size: 0.75rem;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .badge {
+      background: linear-gradient(135deg, #996515, #dfb15b);
+      color: #000;
+      font-size: 0.65rem;
+      font-weight: bold;
+      padding: 4px 8px;
+      border-radius: 12px;
+      text-transform: uppercase;
+    }
+
+    /* COUNTDOWN TIMER STYLING */
+    .countdown-box {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .time-unit {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid #dfb15b;
+      padding: 8px 12px;
+      border-radius: 6px;
+      min-width: 60px;
+    }
+
+    .time-unit span {
+      display: block;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #f8b500;
+    }
+
+    .time-unit label {
+      font-size: 0.6rem;
+      color: #a89478;
+      text-transform: uppercase;
+    }
+
+    /* FORM RECRUITMENT STYLING */
+    .recruit-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 15px;
+      text-align: left;
+    }
+
+    .recruit-form label {
+      font-size: 0.75rem;
+      color: #dfb15b;
+      letter-spacing: 1px;
+    }
+
+    .recruit-form input, .recruit-form select {
+      width: 100%;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(223, 177, 91, 0.4);
+      color: #fff;
+      border-radius: 4px;
+      font-family: inherit;
+    }
+
+    .close-btn {
+      background: transparent;
+      border: 1px solid #dfb15b;
+      color: #dfb15b;
+      padding: 10px 24px;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 2px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: 0.3s;
+      margin-top: 15px;
+    }
+
+    .close-btn:hover, .close-btn:active {
+      background-color: #dfb15b;
+      color: #0b0204;
+    }
+
+    @media (max-width: 600px) {
+      .brand-logo { width: 90px; height: 90px; }
+      .brand-title { font-size: 1.2rem; }
+      .brand-subtitle { font-size: 2.2rem; }
+      .header-section h1 { font-size: 1.8rem; }
+      .menu-btn { font-size: 0.9rem; padding: 14px 16px; }
+      .sub-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body id="main-body">
+
+  <!-- ELEMENT AUDIO & TOMBOL KONTROL -->
+  <audio id="bgm" loop preload="auto">
+    <source id="bgm-source" src="bgm1.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="audio-control-box">
+    <button class="audio-control" id="audio-btn">
+      <span id="audio-icon">🎵</span> <span id="audio-status">PLAY MUSIC</span>
+    </button>
+    
+    <select id="bgm-selector" class="bgm-select">
+      <option value="song1">🌸 Mystic Forest (Song 1)</option>
+      <option value="song2">🏰 Vibes Kerajaan (Song 2)</option>
+      <option value="song3">👑 Vibes Berwibawa (Song 3)</option>
+    </select>
+  </div>
+
+  <!-- 1. LOADING SCREEN (5 DETIK) -->
+  <div id="loading-screen">
+    <div class="brand-container">
+      <img src="logo.jpg" class="brand-logo" alt="Logo Empire">
+      <div class="brand-title">Vantoria Nocturne</div>
+      <div class="brand-subtitle">EMPIRE</div>
+      <div class="ornament">❖</div>
+      <div class="progress-box" id="progress-box">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+      <div class="loading-status" id="loading-text">Awakening the Realm... 0%</div>
+      <button class="enter-btn" id="enter-btn">ENTER REALM</button>
+    </div>
+  </div>
+
+  <!-- 2. HALAMAN HOME / MENU UTAMA -->
+  <div class="home-container">
+    <div class="header-section">
+      <img src="logo.jpg" class="brand-logo" alt="Logo Empire">
+      <h2>Welcome To</h2>
+      <h1>VANTORIA NOCTURNE</h1>
+      <div class="ornament">❖</div>
+    </div>
+
+    <!-- TOMBOL MENU INTERAKTIF -->
+    <div class="menu-grid" id="menu-grid">
+      <button class="menu-btn" id="btn-uniform">
+        <span>Uniform Empire</span>
+        <span class="icon">⚔️</span>
+      </button>
+
+      <button class="menu-btn" id="btn-event">
+        <span>Jadwal Event</span>
+        <span class="icon">📜</span>
+      </button>
+
+      <button class="menu-btn" id="btn-pengurus">
+        <span>Silsilah Pengurus</span>
+        <span class="icon">🛡️</span>
+      </button>
+
+      <button class="menu-btn" id="btn-anggota">
+        <span>Daftar Anggota</span>
+        <span class="icon">👑</span>
+      </button>
+
+      <button class="menu-btn accent" id="btn-join">
+        <span>Join Empire</span>
+        <span class="icon">⚡</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 3. MODAL UNIFORM SHOWCASE -->
+  <div class="modal-overlay" id="modal-uniform">
+    <div class="modal-content">
+      <div class="modal-title">Uniform Empire</div>
+      <div class="ornament" style="margin: 5px 0;">❖</div>
+      <div class="card-list">
+        <div class="member-card">
+          <div class="member-info">
+            <h4>Pakaian Resmi (Formal)</h4>
+            <p>Setelan Jas / Gaun Gotik Hitam & Elemen Emas</p>
+          </div>
+          <span class="badge">Wajib</span>
+        </div>
+        <div class="member-card">
+          <div class="member-info">
+            <h4>Pakaian Pertempuran / Casual</h4>
+            <p>Jubah Hitam VNE / Jaket Tema Dark Red</p>
+          </div>
+          <span class="badge">Opsional</span>
+        </div>
+      </div>
+      <button class="close-btn" id="close-uniform">TUTUP</button>
+    </div>
+  </div>
+
+  <!-- 4. MODAL JADWAL EVENT & COUNTDOWN -->
+  <div class="modal-overlay" id="modal-event">
+    <div class="modal-content">
+      <div class="modal-title">Event Mendatang</div>
+      <div class="ornament" style="margin: 5px 0;">❖</div>
+      <p style="font-size: 0.85rem; color: #dfb15b;">Grand Assembly & Ritual Empire</p>
+      
+      <div class="countdown-box">
+        <div class="time-unit"><span id="cd-days">03</span><label>Hari</label></div>
+        <div class="time-unit"><span id="cd-hours">12</span><label>Jam</label></div>
+        <div class="time-unit"><span id="cd-mins">45</span><label>Menit</label></div>
+      </div>
+
+      <p style="font-size: 0.8rem; color: #b3a286; font-style: italic;">Lokasi: Discord / Realm VNE</p>
+      <button class="close-btn" id="close-event">TUTUP</button>
+    </div>
+  </div>
+
+  <!-- 5. MODAL DAFTAR SILSILAH PENGURUS -->
+  <div class="modal-overlay" id="modal-pengurus">
+    <div class="modal-content">
+      <div class="modal-title">Silsilah Pengurus</div>
+      <div class="ornament" style="margin: 5px 0;">❖</div>
+      
+      <div class="hierarchy-container">
+        <!-- TIER 1: FOUNDER -->
+        <div class="hierarchy-card founder">
+          <p>FOUNDER EMPIRE</p>
+          <h4>High King / Leader</h4>
+          <span class="status">Pemimpin Utama VNE</span>
+        </div>
+
+        <div class="tree-line"></div>
+
+        <!-- TIER 2: CO-FOUNDER (KOSONG) -->
+        <div class="hierarchy-card empty">
+          <p style="color: #a89478;">CO-FOUNDER</p>
+          <h4 style="color: #888;">[ Posisimih Kosong ]</h4>
+          <span class="status">Belum Ditentukan</span>
+        </div>
+
+        <div class="tree-line"></div>
+
+        <!-- TIER 3: PENGURUS LAINNYA -->
+        <div class="sub-grid">
+          <div class="hierarchy-card">
+            <p>PENGURUS #1</p>
+            <h4>Commander I</h4>
+            <span class="status">Divisi Keamanan</span>
+          </div>
+          <div class="hierarchy-card">
+            <p>PENGURUS #2</p>
+            <h4>Commander II</h4>
+            <span class="status">Divisi Acara</span>
+          </div>
+          <div class="hierarchy-card">
+            <p>PENGURUS #3</p>
+            <h4>Pengurus #03</h4>
+            <span class="status">Divisi Hubungan</span>
+          </div>
+          <div class="hierarchy-card">
+            <p>PENGURUS #4</p>
+            <h4>Pengurus #04</h4>
+            <span class="status">Divisi Media</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="close-btn" id="close-pengurus">TUTUP</button>
+    </div>
+  </div>
+
+  <!-- 6. MODAL DAFTAR ANGGOTA -->
+  <div class="modal-overlay" id="modal-anggota">
+    <div class="modal-content">
+      <div class="modal-title">Daftar Anggota</div>
+      <div class="ornament" style="margin: 5px 0;">❖</div>
+      <div class="card-list">
+        <div class="member-card">
+          <div class="member-info">
+            <h4>Ksatria Nocturne #01</h4>
+            <p>Status: Aktif</p>
+          </div>
+          <span class="badge">Member</span>
+        </div>
+        <div class="member-card">
+          <div class="member-info">
+            <h4>Ksatria Nocturne #02</h4>
+            <p>Status: Aktif</p>
+          </div>
+          <span class="badge">Member</span>
+        </div>
+      </div>
+      <button class="close-btn" id="close-anggota">TUTUP</button>
+    </div>
+  </div>
+
+  <!-- 7. MODAL JOIN RECRUITMENT -->
+  <div class="modal-overlay" id="modal-join">
+    <div class="modal-content">
+      <div class="modal-title">Pendaftaran Anggota</div>
+      <div class="ornament" style="margin: 5px 0;">❖</div>
+      
+      <form class="recruit-form" id="recruit-form">
+        <div>
+          <label>NAMA / NICKNAME</label>
+          <input type="text" required placeholder="Masukkan nama..." />
+        </div>
+        <div>
+          <label>DIVISI YANG DIMINATI</label>
+          <select>
+            <option>Divisi Pengurus</option>
+            <option>Divisi Ksatria (Anggota)</option>
+            <option>Divisi Event & Kreatif</option>
+          </select>
+        </div>
+        <button type="submit" class="close-btn" style="width: 100%; margin-top: 10px;">KIRIM FORM</button>
+      </form>
+
+      <button class="close-btn" id="close-join" style="border: none; font-size: 0.75rem;">BATAL</button>
+    </div>
+  </div>
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const playlist = {
+        song1: "bgm1.mp3",
+        song2: "bgm2.mp3",
+        song3: "bgm3.mp3"
+      };
+
+      const bgm = document.getElementById('bgm');
+      const bgmSource = document.getElementById('bgm-source');
+      const audioIcon = document.getElementById('audio-icon');
+      const audioStatus = document.getElementById('audio-status');
+      const audioBtn = document.getElementById('audio-btn');
+      const bgmSelector = document.getElementById('bgm-selector');
+      const mainBody = document.getElementById('main-body');
+
+      const progressBar = document.getElementById("progress-bar");
+      const loadingText = document.getElementById("loading-text");
+      const enterBtn = document.getElementById("enter-btn");
+      const progressBox = document.getElementById("progress-box");
+      const loadingScreen = document.getElementById("loading-screen");
+
+      let isPlaying = false;
+      let hasInteracted = false;
+
+      function playAudio() {
+        if (!bgm) return;
+        bgm.play().then(function () {
+          isPlaying = true;
+          if (audioIcon) audioIcon.innerText = "🔊";
+          if (audioStatus) audioStatus.innerText = "PAUSE MUSIC";
+        }).catch(function (err) {
+          console.log("Autoplay diblokir browser:", err);
+          isPlaying = false;
+          if (audioIcon) audioIcon.innerText = "🎵";
+          if (audioStatus) audioStatus.innerText = "PLAY MUSIC";
+        });
+      }
+
+      function startAudioOnFirstTouch() {
+        if (!hasInteracted) {
+          hasInteracted = true;
+          playAudio();
+        }
+      }
+
+      function toggleAudio(e) {
+        if (e) e.stopPropagation();
+        hasInteracted = true;
+        if (isPlaying) {
+          bgm.pause();
+          if (audioIcon) audioIcon.innerText = "🎵";
+          if (audioStatus) audioStatus.innerText = "PLAY MUSIC";
+          isPlaying = false;
+        } else {
+          playAudio();
+        }
+      }
+
+      function changeTrack(key) {
+        const newSrc = playlist[key];
+        if (newSrc && bgmSource && bgm) {
+          bgmSource.src = newSrc;
+          bgm.load();
+          if (isPlaying) {
+            playAudio();
+          }
+        }
+      }
+
+      /* LOGIC TRANSISI / DELAY MENU MUNCUL */
+      function dismissLoading() {
+        if (loadingScreen) {
+          loadingScreen.classList.add("hidden");
+        }
+        startAudioOnFirstTouch();
+
+        // Delay kecil sebelum menu aktif untuk cegah mis-click
+        setTimeout(function() {
+          if (mainBody) mainBody.classList.add("ready");
+        }, 300);
+      }
+
+      // Event Listeners Suara
+      if (mainBody) mainBody.addEventListener('click', startAudioOnFirstTouch);
+      if (audioBtn) audioBtn.addEventListener('click', toggleAudio);
+      if (bgmSelector) {
+        bgmSelector.addEventListener('change', function () {
+          changeTrack(bgmSelector.value);
+        });
+      }
+
+      // Event Listener Loading Screen
+      if (loadingScreen) loadingScreen.addEventListener('click', dismissLoading);
+      if (enterBtn) enterBtn.addEventListener('click', dismissLoading);
+
+      // Animation Timer Loading 5 Detik
+      let progress = 0;
+      const totalDuration = 5000;
+      const intervalTime = 50;
+      const increment = (intervalTime / totalDuration) * 100;
+
+      const interval = setInterval(function () {
+        progress += increment;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+          if (loadingText) loadingText.innerText = "Realm Ready!";
+          if (progressBox) progressBox.style.display = "none";
+          if (enterBtn) enterBtn.style.display = "inline-block";
+
+          setTimeout(function () {
+            dismissLoading();
+          }, 1000);
+        } else {
+          if (progressBar) progressBar.style.width = progress + "%";
+          if (loadingText) loadingText.innerText = "Awakening the Realm... " + Math.floor(progress) + "%";
+        }
+      }, intervalTime);
+
+      // Helper Fungsi Modal Popup
+      function openModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) modal.classList.add('active');
+      }
+
+      function closeModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) modal.classList.remove('active');
+      }
+
+      // Assign Modal Trigger Buttons
+      const btnUniform = document.getElementById('btn-uniform');
+      if (btnUniform) btnUniform.addEventListener('click', function () { openModal('modal-uniform'); });
+
+      const btnEvent = document.getElementById('btn-event');
+      if (btnEvent) btnEvent.addEventListener('click', function () { openModal('modal-event'); });
+
+      const btnPengurus = document.getElementById('btn-pengurus');
+      if (btnPengurus) btnPengurus.addEventListener('click', function () { openModal('modal-pengurus'); });
+
+      const btnAnggota = document.getElementById('btn-anggota');
+      if (btnAnggota) btnAnggota.addEventListener('click', function () { openModal('modal-anggota'); });
+
+      const btnJoin = document.getElementById('btn-join');
+      if (btnJoin) btnJoin.addEventListener('click', function () { openModal('modal-join'); });
+
+      // Assign Modal Close Buttons
+      const closeUniform = document.getElementById('close-uniform');
+      if (closeUniform) closeUniform.addEventListener('click', function () { closeModal('modal-uniform'); });
+
+      const closeEvent = document.getElementById('close-event');
+      if (closeEvent) closeEvent.addEventListener('click', function () { closeModal('modal-event'); });
+
+      const closePengurus = document.getElementById('close-pengurus');
+      if (closePengurus) closePengurus.addEventListener('click', function () { closeModal('modal-pengurus'); });
+
+      const closeAnggota = document.getElementById('close-anggota');
+      if (closeAnggota) closeAnggota.addEventListener('click', function () { closeModal('modal-anggota'); });
+
+      const closeJoin = document.getElementById('close-join');
+      if (closeJoin) closeJoin.addEventListener('click', function () { closeModal('modal-join'); });
+
+      // Form Recruitment Submit Event
+      const recruitForm = document.getElementById('recruit-form');
+      if (recruitForm) {
+        recruitForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          alert("Permohonan Anda telah terkirim ke Pengurus Vantoria Nocturne Empire!");
+          closeModal('modal-join');
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
