@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -547,22 +545,318 @@
             </section>
         </div>
 
-        <!-- PAGE 4: UNIFORM -->
-        <div id="uniform-page" class="page-content">
-            <section>
-                <h2>🥋 Uniform Vantoria Empire</h2>
-                <div class="uniform-box">
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">Ketentuan dan tampilan seragam resmi anggota SQ Vantoria Nocturne Empire.</p>
-                    <img src="unif.jpg" alt="Uniform Squad" class="uniform-img" onerror="this.src='https://via.placeholder.com/600x350/1e080e/e5b869?text=Uniform+Vantoria+Empire'">
-                </div>
-            </section>
-        </div>
+        <!-- PAGE 4: UNIFORM (GANTI BARIS 551 - 559 DENGAN KODE INI) -->
+<div id="uniform-page" class="page-content">
+  
+  <!-- CSS Khusus Halaman Uniform -->
+  <style>
+    .unif-version-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.8rem;
+      margin: 1.5rem 0 2rem 0;
+      flex-wrap: wrap;
+    }
 
-        <!-- FOOTER -->
-        <footer>
-            <p class="footer-latin">🏰 Valete, Et Bene Adiynxistis Imperio</p>
-            <p style="font-family: 'Cinzel', serif; font-size: 0.85rem; color: #fff;">⚔️ VANTORIA NOCTURNE EMPIRE 🌟</p>
-        </footer>
+    .v-tab-btn {
+      background: rgba(20, 16, 38, 0.8);
+      border: 1px solid #d4af37;
+      color: #e2e8f0;
+      padding: 0.6rem 1.4rem;
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .v-tab-btn:hover {
+      background: rgba(212, 175, 55, 0.2);
+      color: #ffd700;
+    }
+
+    .v-tab-btn.active {
+      background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
+      color: #0b0914;
+      border-color: #ffd700;
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+    }
+
+    .version-content {
+      display: none;
+    }
+
+    .version-content.active {
+      display: block;
+      animation: unifFadeIn 0.4s ease-in-out;
+    }
+
+    @keyframes unifFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .version-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .version-header h3 {
+      font-size: 1.4rem;
+      color: #f1f5f9;
+      font-family: 'Cinzel', serif;
+    }
+
+    .version-header p {
+      color: #d4af37;
+      font-style: italic;
+      font-size: 0.88rem;
+    }
+
+    .gender-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .unif-card {
+      background: linear-gradient(145deg, rgba(35, 10, 15, 0.85) 0%, rgba(15, 5, 8, 0.95) 100%);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    }
+
+    .gender-badge {
+      position: absolute;
+      top: 0.8rem;
+      left: 0.8rem;
+      background: rgba(212, 175, 55, 0.2);
+      border: 1px solid #d4af37;
+      color: #ffd700;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 15px;
+    }
+
+    .img-wrapper {
+      width: 180px;
+      height: 180px;
+      margin: 1.2rem 0 0.8rem 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .unif-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      image-rendering: pixelated;
+      transition: transform 0.3s ease;
+    }
+
+    .unif-img.flipped {
+      transform: scaleX(-1);
+    }
+
+    .btn-flip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      color: #e2e8f0;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-flip:hover {
+      background: #d4af37;
+      color: #0b0914;
+    }
+
+    .unif-details {
+      text-align: center;
+    }
+
+    .unif-details h4 {
+      color: #ffd700;
+      font-size: 1.1rem;
+      margin-bottom: 0.4rem;
+      font-family: 'Cinzel', serif;
+    }
+
+    .unif-details p {
+      color: #cbd5e1;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .placeholder-img {
+      width: 100%;
+      height: 100%;
+      border: 1px dashed rgba(212, 175, 55, 0.3);
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #94a3b8;
+      font-size: 0.8rem;
+      text-align: center;
+      padding: 0.5rem;
+    }
+  </style>
+
+  <section>
+    <h2 style="text-align: center; color: #ffd700;">💀 Uniform Vantoria Empire</h2>
+    <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-top: 0.4rem;">Ketentuan dan tampilan seragam resmi anggota SQ Vantoria Nocturne</p>
+
+    <!-- Sub Tab V1, V2, V3 -->
+    <div class="unif-version-tabs">
+      <button class="v-tab-btn active" onclick="switchUniformVersion('v1', event)">UNIFORM V1</button>
+      <button class="v-tab-btn" onclick="switchUniformVersion('v2', event)">UNIFORM V2</button>
+      <button class="v-tab-btn" onclick="switchUniformVersion('v3', event)">UNIFORM V3</button>
+    </div>
+
+    <!-- UNIFORM V1 -->
+    <div id="unif-v1-content" class="version-content active">
+      <div class="version-header">
+        <h3>Generasi I: The Astral Genesis</h3>
+        <p>"Awal Kebangkitan Garda Utama"</p>
+      </div>
+      <div class="gender-grid">
+        <div class="unif-card">
+          <span class="gender-badge">♂ MALE</span>
+          <div class="img-wrapper">
+            <img id="img-v1-m" src="unifV1cowo.jpg" alt="V1 Male" class="unif-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="placeholder-img" style="display:none;">[Foto Unif V1 Cowok]</div>
+          </div>
+          <button class="btn-flip" onclick="toggleFlip('img-v1-m')">🔄 Hadap Kiri / Kanan</button>
+          <div class="unif-details">
+            <h4>V1 Male Edition</h4>
+            <p>Balutan Crimson Red dan Pure White dengan Cross-Vest serta jubah kebesaran, menandakan simbol kehormatan seorang perwira muda.</p>
+          </div>
+        </div>
+        <div class="unif-card">
+          <span class="gender-badge">♀ FEMALE</span>
+          <div class="img-wrapper">
+            <img id="img-v1-f" src="unifV1cewe.jpg" alt="V1 Female" class="unif-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="placeholder-img" style="display:none;">[Foto Unif V1 Cewek]</div>
+          </div>
+          <button class="btn-flip" onclick="toggleFlip('img-v1-f')">🔄 Hadap Kiri / Kanan</button>
+          <div class="unif-details">
+            <h4>V1 Female Edition</h4>
+            <p>Gaya Balutan Pure White dan Soft Gold dengan gaun Royal Dress serta mahkota bunga, menandakan simbol keanggunan dan kebangsawanan tertinggi.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UNIFORM V2 -->
+    <div id="unif-v2-content" class="version-content">
+      <div class="version-header">
+        <h3>Generasi II: Iron Vanguard</h3>
+        <p>"Era Ekspansi & Ketahanan Taktis"</p>
+      </div>
+      <div class="gender-grid">
+        <div class="unif-card">
+          <span class="gender-badge">♂ MALE</span>
+          <div class="img-wrapper">
+            <img id="img-v2-m" src="unif2cowo.jpg" alt="V2 Male" class="unif-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="placeholder-img" style="display:none;">[Foto Unif V2 Cowok]</div>
+          </div>
+          <button class="btn-flip" onclick="toggleFlip('img-v2-m')">🔄 Hadap Kiri / Kanan</button>
+          <div class="unif-details">
+            <h4>V2 Male Edition</h4>
+            <p>Dilengkapi Iron Visor dan zirah bertema toxic green glow, dirancang khusus untuk ketahanan taktis di medan tempur berbahaya.</p>
+          </div>
+        </div>
+        <div class="unif-card">
+          <span class="gender-badge">♀ FEMALE</span>
+          <div class="img-wrapper">
+            <img id="img-v2-f" src="assets/images/unif2cewe.jpg" alt="V2 Female" class="unif-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="placeholder-img" style="display:none;">[Foto Unif V2 Cewek]</div>
+          </div>
+          <button class="btn-flip" onclick="toggleFlip('img-v2-f')">🔄 Hadap Kiri / Kanan</button>
+          <div class="unif-details">
+            <h4>V2 Female Edition</h4>
+            <p>Zirah pelindung ramping bertema garda depan dengan aksen Iron Visor.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UNIFORM V3 -->
+    <div id="unif-v3-content" class="version-content">
+      <div class="version-header">
+        <h3>Generasi III: Obsidian Sovereign</h3>
+        <p>"Puncak Kejayaan & Wibawa Royale"</p>
+      </div>
+      <div class="gender-grid">
+        <div class="unif-card">
+          <span class="gender-badge">♂ MALE</span>
+          <div class="img-wrapper">
+            <img id="img-v3-m" src="unif3cowo.jpg" alt="V3 Male" class="unif-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="placeholder-img" style="display:none;">[Foto Unif V3 Cowok]</div>
+          </div>
+          <button class="btn-flip" onclick="toggleFlip('img-v3-m')">🔄 Hadap Kiri / Kanan</button>
+          <div class="unif-details">
+            <h4>V3 Male Edition</h4>
+            <p>Perpaduan Obsidian Dark, lis emas, Golden Mask, dan jubah Crimson Velvet, memancarkan takhta dan kepemimpinan tertinggi.</p>
+          </div>
+        </div>
+        <div class="unif-card">
+          <span class="gender-badge">♀ FEMALE</span>
+          <div class="img-wrapper">
+            <img id="img-v3-f" src="assets/images/unif3cewe.jpg" alt="V3 Female" class="unif-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="placeholder-img" style="display:none;">[Foto Unif V3 Cewek]</div>
+          </div>
+          <button class="btn-flip" onclick="toggleFlip('img-v3-f')">🔄 Hadap Kiri / Kanan</button>
+          <div class="unif-details">
+            <h4>V3 Female Edition</h4>
+            <p>Gaun kehormatan Obsidian berlapis emas murni dan aksen royal crimson.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JS Khusus Halaman Uniform -->
+  <script>
+    function switchUniformVersion(version, e) {
+      const tabButtons = document.querySelectorAll('.v-tab-btn');
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      if (e && e.target) {
+        e.target.classList.add('active');
+      }
+
+      const contents = document.querySelectorAll('.version-content');
+      contents.forEach(content => content.classList.remove('active'));
+
+      const targetContent = document.getElementById('unif-' + version + '-content');
+      if (targetContent) {
+        targetContent.classList.add('active');
+      }
+    }
+
+    function toggleFlip(imageId) {
+      const img = document.getElementById(imageId);
+      if (img) {
+        img.classList.toggle('flipped');
+      }
+    }
+  </script>
+</div>
+
 
     </div>
 
