@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -5,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --bg-dark: #120306;
@@ -25,7 +28,7 @@
         }
 
         body {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Playfair Display', serif, sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-light);
             background-image: 
@@ -38,7 +41,19 @@
             justify-content: center;
         }
 
-        /* Loading Screen + Animasi Zoom Out & Fade Out */
+        /* LOGO TAMPILAN GAMBAR */
+        .logo-placeholder {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 2px solid var(--gold-primary);
+            box-shadow: 0 0 20px rgba(229, 184, 105, 0.6);
+            object-fit: cover;
+            margin: 0 auto 15px auto;
+            display: block;
+        }
+
+        /* LOADING SCREEN */
         #loader-wrapper {
             position: fixed;
             top: 0;
@@ -52,35 +67,17 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
-            transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.9s ease, visibility 0.9s ease;
-            transform-origin: center center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
         }
 
-        /* Efek Zoom + Fade Out ketika kelas 'fade-zoom' diaktifkan */
         #loader-wrapper.fade-zoom {
             opacity: 0;
-            transform: scale(1.3);
             visibility: hidden;
             pointer-events: none;
         }
 
-        .loader-logo {
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 2px solid var(--gold-primary);
-            box-shadow: 0 0 20px rgba(229, 184, 105, 0.6);
-            margin-bottom: 15px;
-            transition: transform 0.9s ease;
-        }
-
-        #loader-wrapper.fade-zoom .loader-logo {
-            transform: scale(1.2);
-        }
-
         .loader-title {
-            font-family: 'Cinzel', serif;
+            font-family: 'Cinzel', serif, sans-serif;
             color: var(--gold-primary);
             font-size: 1.3rem;
             letter-spacing: 3px;
@@ -104,17 +101,16 @@
             width: 0%;
             height: 100%;
             background: linear-gradient(90deg, #7a0c16, #e5b869);
-            animation: fillProgress 5s linear forwards;
+            animation: fillProgress 2s linear forwards;
         }
 
         .loading-quotes {
-            font-family: 'Cinzel', serif;
+            font-family: 'Cinzel', serif, sans-serif;
             font-size: 0.82rem;
             color: var(--gold-light);
             font-style: italic;
             text-align: center;
             min-height: 24px;
-            transition: opacity 0.5s ease;
         }
 
         @keyframes fillProgress {
@@ -122,22 +118,13 @@
             100% { width: 100%; }
         }
 
-        /* Main Container */
+        /* MAIN CONTAINER */
         .container {
-            max-width: 800px;
+            max-width: 900px;
             width: 100%;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 1s ease 0.3s, transform 1s ease 0.3s;
             padding-bottom: 60px;
         }
 
-        .container.loaded {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Header */
         header {
             text-align: center;
             padding: 35px 20px 25px;
@@ -158,21 +145,8 @@
             background: var(--border-gold);
         }
 
-        .logo-container {
-            margin-bottom: 18px;
-        }
-
-        .empire-logo {
-            width: 130px;
-            height: 130px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 2px solid var(--gold-primary);
-            box-shadow: 0 0 20px rgba(229, 184, 105, 0.5), 0 0 10px rgba(122, 12, 22, 0.8);
-        }
-
         .latin-title {
-            font-family: 'Cinzel', serif;
+            font-family: 'Cinzel', serif, sans-serif;
             font-style: italic;
             color: var(--gold-primary);
             letter-spacing: 2px;
@@ -181,8 +155,8 @@
         }
 
         h1 {
-            font-family: 'Cinzel', serif;
-            font-size: 1.7rem;
+            font-family: 'Cinzel', serif, sans-serif;
+            font-size: 1.6rem;
             font-weight: 700;
             color: #ffffff;
             text-transform: uppercase;
@@ -198,7 +172,7 @@
             max-width: 650px;
             margin: 0 auto;
         }
-        /* Audio Player */
+
         .audio-section {
             margin-top: 25px;
             padding: 15px;
@@ -208,7 +182,7 @@
         }
 
         .audio-title {
-            font-family: 'Cinzel', serif;
+            font-family: 'Cinzel', serif, sans-serif;
             font-size: 0.85rem;
             color: var(--gold-primary);
             margin-bottom: 10px;
@@ -229,7 +203,7 @@
             color: var(--gold-light);
             padding: 6px 12px;
             font-size: 0.8rem;
-            font-family: 'Cinzel', serif;
+            font-family: 'Cinzel', serif, sans-serif;
             border-radius: 4px;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -246,10 +220,9 @@
             filter: invert(90%) sepia(20%) saturate(1000%) hue-rotate(330deg);
         }
 
-        /* Navigation Menu Buttons */
         .nav-menu {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
             gap: 12px;
             margin-bottom: 22px;
         }
@@ -259,7 +232,7 @@
             border: 1px solid var(--gold-primary);
             color: var(--gold-light);
             padding: 12px;
-            font-family: 'Cinzel', serif;
+            font-family: 'Cinzel', serif, sans-serif;
             font-size: 0.85rem;
             font-weight: 600;
             border-radius: 8px;
@@ -274,10 +247,8 @@
         .nav-btn:hover, .nav-btn.active {
             background: var(--crimson-accent);
             box-shadow: 0 0 15px rgba(229, 184, 105, 0.5);
-            transform: translateY(-2px);
         }
 
-        /* Sections & Page Switcher */
         section {
             background: var(--card-bg);
             border: 1px solid rgba(229, 184, 105, 0.25);
@@ -287,22 +258,11 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
-        .page-content {
-            display: none;
-            animation: fadeIn 0.5s ease forwards;
-        }
-
-        .page-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .page-content { display: none; }
+        .page-content.active { display: block; }
 
         h2 {
-            font-family: 'Cinzel', serif;
+            font-family: 'Cinzel', serif, sans-serif;
             font-size: 1.25rem;
             color: var(--gold-primary);
             margin-bottom: 18px;
@@ -311,7 +271,6 @@
             letter-spacing: 1px;
         }
 
-        /* Rules List */
         .rules-list { list-style: none; }
         .rules-list li {
             padding: 10px 0;
@@ -321,50 +280,242 @@
         }
         .highlight-danger { color: #ff5555; font-weight: 600; }
 
-        /* Admin Hierarchy */
-        .admin-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        /* HIERARKI PENGURUS */
+        .tree-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            padding: 10px 0;
+            position: relative;
+        }
+
+        .tree-level {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            position: relative;
+        }
+
+        .tree-level::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            width: 60%;
+            height: 2px;
+            background: rgba(229, 184, 105, 0.3);
+        }
+
+        .tree-level:first-child::before { display: none; }
+
+        .admin-tree-card {
+            background: rgba(18, 3, 6, 0.85);
+            border: 1px solid var(--gold-primary);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
             gap: 12px;
+            width: 260px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .admin-card {
-            background: rgba(18, 3, 6, 0.6);
-            padding: 14px;
-            border-radius: 6px;
-            border: 1px solid rgba(229, 184, 105, 0.3);
-            text-align: center;
+
+        .admin-tree-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 15px rgba(229, 184, 105, 0.4);
         }
+
+        .admin-avatar {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            border: 2px solid var(--gold-primary);
+            object-fit: cover;
+            background: #2a080c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .admin-info {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            overflow: hidden;
+        }
+
         .admin-role {
-            font-family: 'Cinzel', serif;
-            font-size: 0.8rem;
+            font-family: 'Cinzel', serif, sans-serif;
+            font-size: 0.72rem;
             color: var(--gold-primary);
             font-weight: 700;
+            letter-spacing: 0.5px;
         }
-        .admin-name { font-size: 0.95rem; margin-top: 5px; color: #fff; }
 
-        /* Member Grid */
+        .admin-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #fff;
+            margin: 2px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .admin-date {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .section-subtitle {
+            font-family: 'Cinzel', serif, sans-serif;
+            font-size: 1rem;
+            color: var(--gold-light);
+            margin: 15px 0 10px 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .hof-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .hof-card {
+            background: linear-gradient(135deg, rgba(60, 10, 18, 0.9), rgba(20, 4, 8, 0.9));
+            border: 1px solid var(--gold-primary);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(229, 184, 105, 0.2);
+        }
+
         .member-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
             gap: 10px;
         }
+
         .member-card {
             background: rgba(18, 3, 6, 0.5);
-            padding: 10px;
-            border-radius: 5px;
+            padding: 12px 8px;
+            border-radius: 6px;
             border: 1px dashed rgba(229, 184, 105, 0.25);
             text-align: center;
+            cursor: pointer;
         }
-        .member-no { font-family: 'Cinzel', serif; font-size: 0.72rem; color: var(--gold-primary); }
-        .member-name { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
 
-        /* Schedule */
+        .member-no { 
+            font-family: 'Cinzel', serif, sans-serif; 
+            font-size: 0.75rem; 
+            color: var(--gold-primary); 
+            font-weight: bold;
+        }
+
+        .member-name { 
+            font-size: 0.88rem; 
+            color: var(--text-muted); 
+            margin-top: 4px; 
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+            padding: 15px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .profile-modal {
+            background: var(--card-bg);
+            border: 2px solid var(--gold-primary);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            color: var(--gold-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .profile-slot {
+            font-family: 'Cinzel', serif, sans-serif;
+            font-size: 0.8rem;
+            color: var(--gold-primary);
+        }
+
+        .profile-name {
+            font-family: 'Cinzel', serif, sans-serif;
+            font-size: 1.3rem;
+            color: #fff;
+            margin: 5px 0;
+        }
+
+        .profile-role {
+            display: inline-block;
+            background: rgba(122, 12, 22, 0.8);
+            border: 1px solid var(--gold-primary);
+            color: var(--gold-light);
+            font-size: 0.75rem;
+            padding: 3px 12px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .profile-bio {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            background: rgba(18, 3, 6, 0.5);
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .profile-status {
+            font-size: 0.8rem;
+            color: var(--gold-light);
+        }
+
         .schedule-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
             margin-top: 12px;
         }
+
         .time-badge {
             background: rgba(18, 3, 6, 0.8);
             padding: 10px;
@@ -374,7 +525,35 @@
             text-align: center;
         }
 
-        /* Uniform Box */
+        .unif-version-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .v-tab-btn {
+            background: rgba(20, 16, 38, 0.8);
+            border: 1px solid var(--gold-primary);
+            color: var(--text-light);
+            padding: 0.6rem 1.2rem;
+            font-family: 'Cinzel', serif, sans-serif;
+            font-size: 0.82rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .v-tab-btn.active {
+            background: var(--crimson-accent);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(229, 184, 105, 0.4);
+        }
+
+        .version-content { display: none; }
+        .version-content.active { display: block; }
+
         .uniform-box {
             text-align: center;
             padding: 15px;
@@ -382,15 +561,51 @@
             border: 1px solid rgba(229, 184, 105, 0.3);
             border-radius: 8px;
         }
-        .uniform-img {
-            max-width: 100%;
-            height: auto;
+
+        .uniform-img-display {
+            width: 100%;
+            height: 250px;
+            object-fit: contain;
             border-radius: 8px;
             border: 1px solid var(--gold-primary);
-            margin-top: 10px;
+            background: #120306;
+            margin-top: 8px;
         }
 
-        /* Back Floating Button (Pojok Kiri Bawah) */
+        .uniform-placeholder {
+            width: 100%;
+            height: 250px;
+            border-radius: 8px;
+            border: 1px solid var(--gold-primary);
+            margin-top: 8px;
+            background: linear-gradient(135deg, #220509 0%, #4a0c14 50%, #120306 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold-light);
+            font-family: 'Cinzel', serif;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        .uniform-placeholder .icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .uniform-desc {
+            margin-top: 12px;
+            padding: 10px;
+            background: rgba(18, 3, 6, 0.5);
+            border-radius: 6px;
+            border-left: 2px solid var(--gold-primary);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-style: italic;
+            text-align: center;
+            line-height: 1.5;
+        }
+
         .btn-back-floating {
             position: fixed;
             bottom: 20px;
@@ -400,42 +615,32 @@
             border: 1px solid var(--gold-primary);
             padding: 10px 18px;
             border-radius: 30px;
-            font-family: 'Cinzel', serif;
+            font-family: 'Cinzel', serif, sans-serif;
             font-size: 0.8rem;
-            font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.8);
             display: none;
             z-index: 1000;
-            transition: all 0.3s ease;
-        }
-        .btn-back-floating:hover {
-            background: var(--gold-primary);
-            color: #000;
-            box-shadow: 0 0 15px rgba(229, 184, 105, 0.8);
         }
 
-        /* Footer */
         footer {
             text-align: center;
             padding: 25px 10px 0;
             border-top: 1px solid rgba(229, 184, 105, 0.2);
         }
+
         .footer-latin {
-            font-family: 'Cinzel', serif;
-            font-style: italic;
+            font-family: 'Cinzel', serif, sans-serif;
             color: var(--gold-primary);
             font-size: 0.9rem;
-            margin-bottom: 5px;
         }
     </style>
 </head>
 <body>
 
-    <!-- LOADING SCREEN -->
+    <!-- LOADING SCREEN MET LOGO.JPG -->
     <div id="loader-wrapper">
-        <img src="logo.jpg" alt="Squad Logo" class="loader-logo">
-        <div class="loader-title">⚔️ VANTORIA NOCTURNE 🌟</div>
+        <img src="logo.jpg" class="logo-placeholder" alt="Logo Empire">
+        <div class="loader-title">VANTORIA NOCTURNE</div>
         <div class="progress-bar-container">
             <div class="progress-bar"></div>
         </div>
@@ -447,9 +652,7 @@
 
         <!-- HEADER -->
         <header>
-            <div class="logo-container">
-                <img src="logo.jpg" alt="Vantoria Logo" class="empire-logo">
-            </div>
+            <img src="logo.jpg" class="logo-placeholder" alt="Logo Empire">
             
             <div class="latin-title">📜 Salve, Bene Venisti Ad Imperium</div>
             <h1>⚔️ VANTORIA NOCTURNE EMPIRE 🌟</h1>
@@ -457,7 +660,7 @@
                 Selamat datang dan selamat bergabung ke dalam SQ kami! Kami sangat senang jika kalian tertarik untuk bergabung bersama kami, Squad Vantoria Nocturne Empire.
             </p>
 
-            <!-- AUDIO CONTROLLER -->
+            <!-- AUDIO CONTROLLER (BGM1, BGM2, BGM3) -->
             <div class="audio-section">
                 <div class="audio-title">🎼 BGM EMPIRE ATMOSPHERE</div>
                 <div class="track-buttons">
@@ -473,7 +676,7 @@
         <div class="nav-menu">
             <button class="nav-btn" onclick="openPage('admin-page')">🪶 Admin</button>
             <button class="nav-btn" onclick="openPage('member-page')">🛡️ Members</button>
-            <button class="nav-btn" onclick="openPage('schedule-page')">📝 Patrol</button>
+            <button class="nav-btn" onclick="openPage('schedule-page')">📅 Calendar</button>
             <button class="nav-btn" onclick="openPage('uniform-page')">🥋 Uniform</button>
         </div>
 
@@ -498,431 +701,322 @@
                 </ul>
             </section>
         </div>
-        <!-- PAGE 1: ADMIN -->
+
+        <!-- PAGE 1: ADMIN (SILSILAH PENGURUS) -->
         <div id="admin-page" class="page-content">
             <section>
-                <h2>🪶 Jajaran Admin & Pangkat Kehormatan</h2>
-                <div class="admin-grid">
-                    <div class="admin-card">
-                        <div class="admin-role">🌟 OWNER</div>
-                        <div class="admin-name">Sellyn (07559)</div>
+                <h2>📜 Silsilah Kepengurusan Kekaisaran</h2>
+                
+                <div class="tree-container">
+                    <!-- TINGKAT 1: OWNER -->
+                    <div class="tree-level">
+                        <div class="admin-tree-card">
+                            <div class="admin-avatar">👑</div>
+                            <div class="admin-info">
+                                <span class="admin-role">🌟 Monarki</span>
+                                <span class="admin-name">Sellyn (07559)</span>
+                                <span class="admin-date">🗓️ Dilantik: 28 Juli 2025</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="admin-card">
-                        <div class="admin-role">⚒️ STAFF¹</div>
-                        <div class="admin-name">Yuna (50507)</div>
+
+                    <!-- TINGKAT 2: STAFF -->
+                    <div class="tree-level">
+                        <div class="admin-tree-card">
+                            <div class="admin-avatar">⚒️</div>
+                            <div class="admin-info">
+                                <span class="admin-role">⚒️ Tribunus I</span>
+                                <span class="admin-name">Yuna (50507)</span>
+                                <span class="admin-date">🗓️ Dilantik: 30 Juli 2025</span>
+                            </div>
+                        </div>
+                        <div class="admin-tree-card">
+                            <div class="admin-avatar">⚒️</div>
+                            <div class="admin-info">
+                                <span class="admin-role">⚒️ Tribunus II</span>
+                                <span class="admin-name">Kage (16224)</span>
+                                <span class="admin-date">🗓️ Dilantik: 28 Juli 2025</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="admin-card">
-                        <div class="admin-role">⚒️ STAFF²</div>
-                        <div class="admin-name">Kage (16224)</div>
-                    </div>
-                    <div class="admin-card">
-                        <div class="admin-role">🖋️ T-EDITOR¹</div>
-                        <div class="admin-name">Asha (7609)</div>
+
+                    <!-- TINGKAT 3: EDITOR -->
+                    <div class="tree-level">
+                        <div class="admin-tree-card">
+                            <div class="admin-avatar">🖋️</div>
+                            <div class="admin-info">
+                                <span class="admin-role">🖋️ Curator I</span>
+                                <span class="admin-name">Asha (7609)</span>
+                                <span class="admin-date">🗓️ Dilantik: 30 Juli 2025</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
         </div>
 
-        <!-- PAGE 2: MEMBERS (41 SLOTS) -->
+        <!-- PAGE 2: MEMBERS -->
         <div id="member-page" class="page-content">
             <section>
-                <h2>🛡️ Anggota / Member (41 Slots)</h2>
+                <h2>🛡️ Anggota / Member </h2>
+                
+                <div class="section-subtitle">🏆 Hall of Fame </div>
+                <div id="hof-grid" class="hof-grid"></div>
+
+                <div class="section-subtitle">⚔️ Hamba Abdi </div>
                 <div id="member-grid" class="member-grid"></div>
             </section>
         </div>
 
-        <!-- PAGE 3: SCHEDULE -->
+        <!-- PAGE 3: CALENDAR EVENT & SCHEDULE -->
         <div id="schedule-page" class="page-content">
             <section>
-                <h2>📝 Jadwal Patrol</h2>
-                <p style="color: var(--gold-primary); margin-bottom: 8px; font-family: 'Cinzel', serif;"><strong>HARI:</strong> SABTU - MINGGU (LIBUR)</p>
-                <div class="schedule-grid">
-                    <div class="time-badge">🇮🇩 19.10 WIB</div>
-                    <div class="time-badge">🇮🇩 20.10 WITA</div>
-                    <div class="time-badge">🇮🇩 21.10 WIT</div>
-                    <div class="time-badge">🇲🇾 22.10 MST</div>
+                <h2>📅 Calendar Event & Schedule</h2>
+                
+                <!-- JADWAL PATROL RUTIN -->
+                <div style="margin-bottom: 25px;">
+                    <h3 class="section-subtitle">⚔️ Jadwal Rutin Patrol</h3>
+                    <p style="color: var(--gold-primary); margin-bottom: 10px; font-size: 0.9rem;">
+                        <strong>HARI RUTIN:</strong> SABTU - MINGGU 
+                    </p>
+                    <div class="schedule-grid">
+                        <div class="time-badge">🇮🇩 19.10 WIB</div>
+                        <div class="time-badge">🇮🇩 20.10 WITA</div>
+                        <div class="time-badge">🇮🇩 21.10 WIT</div>
+                        <div class="time-badge">🇲🇾 22.10 MST</div>
+                    </div>
                 </div>
+
+                <!-- EVENT YANG AKAN DATANG -->
+                <div>
+                    <h3 class="section-subtitle">🌟 Event Yang Akan Datang</h3>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
+                        <!-- Event 1 -->
+                        <div style="background: rgba(18, 3, 6, 0.7); border: 1px solid var(--gold-primary); border-radius: 8px; padding: 12px; text-align: left;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                <span style="font-family: 'Cinzel', serif; color: var(--gold-primary); font-weight: bold; font-size: 0.9rem;">👑 Vantoria Anniversary</span>
+                                <span style="background: var(--crimson-accent); border: 1px solid var(--gold-primary); color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px;">Upcoming</span>
+                            </div>
+                            <p style="font-size: 0.8rem; color: var(--gold-light); margin-bottom: 4px;">🗓️ Tanggal: 28 Desember 2026</p>
+                            <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">Perayaan ulang tahun kekaisaran Vantoria Nocturne. Seluruh anggota wajib menggunakan Uniform Khusus.</p>
+                        </div>
+
+                        <!-- Event 2 -->
+                        <div style="background: rgba(18, 3, 6, 0.7); border: 1px solid rgba(229, 184, 105, 0.4); border-radius: 8px; padding: 12px; text-align: left;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                <span style="font-family: 'Cinzel', serif; color: var(--gold-primary); font-weight: bold; font-size: 0.9rem;">⚔️ Grand Patrol Imperial</span>
+                                <span style="background: rgba(122, 12, 22, 0.5); border: 1px solid var(--gold-primary); color: var(--gold-light); font-size: 0.7rem; padding: 2px 8px; border-radius: 10px;">Scheduled</span>
+                            </div>
+                            <p style="font-size: 0.8rem; color: var(--gold-light); margin-bottom: 4px;">🗓️ Tanggal: Coming Soon</p>
+                            <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">Patrol akbar gabungan bersama divisi khusus kekaisaran.</p>
+                        </div>
+                    </div>
+                </div>
+
             </section>
         </div>
 
-        <!-- PAGE 4: UNIFORM (GANTI BARIS 551 - 559 DENGAN KODE INI) -->
-<div id="uniform-page" class="page-content">
-  
-  <!-- CSS Khusus Halaman Uniform -->
-  <style>
-    .unif-version-tabs {
-      display: flex;
-      justify-content: center;
-      gap: 0.8rem;
-      margin: 1.5rem 0 2rem 0;
-      flex-wrap: wrap;
-    }
+        <!-- PAGE 4: UNIFORM (SESUAI DENGAN GAMBAR DI FOLDER) -->
+        <div id="uniform-page" class="page-content">
+            <section>
+                <h2>🥋 Seragam Squad (Uniform)</h2>
+                
+                <div class="unif-version-tabs">
+                    <button class="v-tab-btn active" onclick="switchUnifVersion('v1', this)">Uniform V1</button>
+                    <button class="v-tab-btn" onclick="switchUnifVersion('v2', this)">Uniform V2</button>
+                    <button class="v-tab-btn" onclick="switchUnifVersion('v3', this)">Uniform V3</button>
+                </div>
 
-    .v-tab-btn {
-      background: rgba(20, 16, 38, 0.8);
-      border: 1px solid #d4af37;
-      color: #e2e8f0;
-      padding: 0.6rem 1.4rem;
-      font-family: 'Cinzel', serif;
-      font-weight: 700;
-      font-size: 0.9rem;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    }
+                <!-- UNIFORM V1 -->
+                <div id="unif-v1" class="version-content active">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <h3 style="color: var(--gold-primary); font-family: 'Cinzel', serif;">Uniform Edition - Version 1.0</h3>
+                        <p style="color: var(--text-muted); font-size: 0.88rem;">Seragam standar harian untuk seluruh anggota Squad.</p>
+                    </div>
+                    
+                    <div class="unif-gender-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px;">
+                        <div class="uniform-box">
+                            <h4 style="color: var(--gold-light); font-family: 'Cinzel', serif; margin-bottom: 8px;">👨 Versi Cowok</h4>
+                            <img src="unifromv1cowo.png" class="uniform-img-display" alt="Unif V1 Cowo">
+                        </div>
+                        <div class="uniform-box">
+                            <h4 style="color: var(--gold-light); font-family: 'Cinzel', serif; margin-bottom: 8px;">👩 Versi Cewek</h4>
+                            <img src="unifv1cewe.png" class="uniform-img-display" alt="Unif V1 Cewe">
+                        </div>
+                    </div>
+                </div>
 
-    .v-tab-btn:hover {
-      background: rgba(212, 175, 55, 0.2);
-      color: #ffd700;
-    }
+                <!-- UNIFORM V2 -->
+                <div id="unif-v2" class="version-content">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <h3 style="color: var(--gold-primary); font-family: 'Cinzel', serif;">Uniform Edition - Version 2.0</h3>
+                        <p style="color: var(--text-muted); font-size: 0.88rem;">Seragam khusus untuk acara / event resmi kekaisaran.</p>
+                    </div>
 
-    .v-tab-btn.active {
-      background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
-      color: #0b0914;
-      border-color: #ffd700;
-      box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
-    }
+                    <div class="unif-gender-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px;">
+                        <div class="uniform-box">
+                            <h4 style="color: var(--gold-light); font-family: 'Cinzel', serif; margin-bottom: 8px;">👨 Versi Cowok</h4>
+                            <img src="unifv2cowo.png" class="uniform-img-display" alt="Unif V2 Cowo">
+                        </div>
+                        <div class="uniform-box">
+                            <h4 style="color: var(--gold-light); font-family: 'Cinzel', serif; margin-bottom: 8px;">👩 Versi Cewek</h4>
+                            <div class="uniform-placeholder">
+                                <div class="icon">⚜️</div>
+                                <div>UNIFORM V2 - CEWEK</div>
+                            </div>
+                            <div class="uniform-desc">"Coming soon..."</div>
+                        </div>
+                    </div>
+                </div>
 
-    .version-content {
-      display: none;
-    }
+                <!-- UNIFORM V3 -->
+                <div id="unif-v3" class="version-content">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <h3 style="color: var(--gold-primary); font-family: 'Cinzel', serif;">Uniform Edition - Version 3.0</h3>
+                        <p style="color: var(--text-muted); font-size: 0.88rem;">Seragam kebesaran elit khusus garda kehormatan Nocturne.</p>
+                    </div>
 
-    .version-content.active {
-      display: block;
-      animation: unifFadeIn 0.4s ease-in-out;
-    }
+                    <div class="unif-gender-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px;">
+                        <div class="uniform-box">
+                            <h4 style="color: var(--gold-light); font-family: 'Cinzel', serif; margin-bottom: 8px;">👨 Versi Cowok</h4>
+                            <img src="unifV3cowo.png" class="uniform-img-display" alt="Unif V3 Cowo">
+                        </div>
+                        <div class="uniform-box">
+                            <h4 style="color: var(--gold-light); font-family: 'Cinzel', serif; margin-bottom: 8px;">👩 Versi Cewek</h4>
+                            <div class="uniform-placeholder">
+                                <div class="icon">👑</div>
+                                <div>UNIFORM V3 - CEWEK</div>
+                            </div>
+                            <div class="uniform-desc">"Coming soon..."</div>
+                        </div>
+                    </div>
+                </div>
 
-    @keyframes unifFadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .version-header {
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .version-header h3 {
-      font-size: 1.4rem;
-      color: #f1f5f9;
-      font-family: 'Cinzel', serif;
-    }
-
-    .version-header p {
-      color: #d4af37;
-      font-style: italic;
-      font-size: 0.88rem;
-    }
-
-    .gender-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .unif-card {
-      background: linear-gradient(145deg, rgba(35, 10, 15, 0.85) 0%, rgba(15, 5, 8, 0.95) 100%);
-      border: 1px solid rgba(212, 175, 55, 0.4);
-      border-radius: 12px;
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-    }
-
-    .gender-badge {
-      position: absolute;
-      top: 0.8rem;
-      left: 0.8rem;
-      background: rgba(212, 175, 55, 0.2);
-      border: 1px solid #d4af37;
-      color: #ffd700;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 0.2rem 0.6rem;
-      border-radius: 15px;
-    }
-
-    .img-wrapper {
-      width: 180px;
-      height: 180px;
-      margin: 1.2rem 0 0.8rem 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .unif-img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-      image-rendering: pixelated;
-      transition: transform 0.3s ease;
-    }
-
-    .unif-img.flipped {
-      transform: scaleX(-1);
-    }
-
-    .btn-flip {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(212, 175, 55, 0.4);
-      color: #e2e8f0;
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      margin-bottom: 1rem;
-      transition: all 0.2s ease;
-    }
-
-    .btn-flip:hover {
-      background: #d4af37;
-      color: #0b0914;
-    }
-
-    .unif-details {
-      text-align: center;
-    }
-
-    .unif-details h4 {
-      color: #ffd700;
-      font-size: 1.1rem;
-      margin-bottom: 0.4rem;
-      font-family: 'Cinzel', serif;
-    }
-
-    .unif-details p {
-      color: #cbd5e1;
-      font-size: 0.85rem;
-      line-height: 1.5;
-    }
-
-    .placeholder-img {
-      width: 100%;
-      height: 100%;
-      border: 1px dashed rgba(212, 175, 55, 0.3);
-      border-radius: 8px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #94a3b8;
-      font-size: 0.8rem;
-      text-align: center;
-      padding: 0.5rem;
-    }
-  </style>
-
-  <section>
-    <h2 style="text-align: center; color: #ffd700;">💀 Uniform Vantoria Empire</h2>
-    <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-top: 0.4rem;">Ketentuan dan tampilan seragam resmi anggota SQ Vantoria Nocturne</p>
-
-    <!-- Sub Tab V1, V2, V3 -->
-    <div class="unif-version-tabs">
-      <button class="v-tab-btn active" onclick="switchUniformVersion('v1', event)">UNIFORM V1</button>
-      <button class="v-tab-btn" onclick="switchUniformVersion('v2', event)">UNIFORM V2</button>
-      <button class="v-tab-btn" onclick="switchUniformVersion('v3', event)">UNIFORM V3</button>
-    </div>
-
-    <!-- UNIFORM V1 -->
-    <div id="unif-v1-content" class="version-content active">
-      <div class="version-header">
-        <h3>Generasi I: The Astral Genesis</h3>
-        <p>"Awal Kebangkitan Garda Utama"</p>
-      </div>
-      <div class="gender-grid">
-        <div class="unif-card">
-          <span class="gender-badge">♂ MALE</span>
-          <div class="img-wrapper">
-            <img id="img-v1-m" src="unifromv1cowo.png" alt="V1 Male" class="unif-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div class="placeholder-img" style="display:none;">[Foto Unif V1 Cowok]</div>
-          </div>
-          <button class="btn-flip" onclick="toggleFlip('img-v1-m')">🔄 Hadap Kiri / Kanan</button>
-          <div class="unif-details">
-            <h4>V1 Male Edition</h4>
-            <p>Balutan Crimson Red dan Pure White dengan Cross-Vest serta jubah kebesaran, menandakan simbol kehormatan seorang perwira muda.</p>
-          </div>
+            </section>
         </div>
-        <div class="unif-card">
-          <span class="gender-badge">♀ FEMALE</span>
-          <div class="img-wrapper">
-            <img id="img-v1-f" src="unifv1cewe.png" alt="V1 Female" class="unif-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div class="placeholder-img" style="display:none;">[Foto Unif V1 Cewek]</div>
-          </div>
-          <button class="btn-flip" onclick="toggleFlip('img-v1-f')">🔄 Hadap Kiri / Kanan</button>
-          <div class="unif-details">
-            <h4>V1 Female Edition</h4>
-            <p>Gaya Balutan Pure White dan Soft Gold dengan gaun Royal Dress serta mahkota bunga, menandakan simbol keanggunan dan kebangsawanan tertinggi.</p>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- UNIFORM V2 -->
-    <div id="unif-v2-content" class="version-content">
-      <div class="version-header">
-        <h3>Generasi II: Iron Vanguard</h3>
-        <p>"Era Ekspansi & Ketahanan Taktis"</p>
-      </div>
-      <div class="gender-grid">
-        <div class="unif-card">
-          <span class="gender-badge">♂ MALE</span>
-          <div class="img-wrapper">
-            <img id="img-v2-m" src="unifv2cowo.png" alt="V2 Male" class="unif-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div class="placeholder-img" style="display:none;">[Foto Unif V2 Cowok]</div>
-          </div>
-          <button class="btn-flip" onclick="toggleFlip('img-v2-m')">🔄 Hadap Kiri / Kanan</button>
-          <div class="unif-details">
-            <h4>V2 Male Edition</h4>
-            <p>Dilengkapi Iron Visor dan zirah bertema toxic green glow, dirancang khusus untuk ketahanan taktis di medan tempur berbahaya.</p>
-          </div>
-        </div>
-        <div class="unif-card">
-          <span class="gender-badge">♀ FEMALE</span>
-          <div class="img-wrapper">
-            <img id="img-v2-f" src="assets/images/unif2cewe.jpg" alt="V2 Female" class="unif-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div class="placeholder-img" style="display:none;">[Foto Unif V2 Cewek]</div>
-          </div>
-          <button class="btn-flip" onclick="toggleFlip('img-v2-f')">🔄 Hadap Kiri / Kanan</button>
-          <div class="unif-details">
-            <h4>V2 Female Edition</h4>
-            <p>Zirah pelindung ramping bertema garda depan dengan aksen Iron Visor.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- UNIFORM V3 -->
-    <div id="unif-v3-content" class="version-content">
-      <div class="version-header">
-        <h3>Generasi III: Obsidian Sovereign</h3>
-        <p>"Puncak Kejayaan & Wibawa Royale"</p>
-      </div>
-      <div class="gender-grid">
-        <div class="unif-card">
-          <span class="gender-badge">♂ MALE</span>
-          <div class="img-wrapper">
-            <img id="img-v3-m" src="unifV3cowo.png" alt="V3 Male" class="unif-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div class="placeholder-img" style="display:none;">[Foto Unif V3 Cowok]</div>
-          </div>
-          <button class="btn-flip" onclick="toggleFlip('img-v3-m')">🔄 Hadap Kiri / Kanan</button>
-          <div class="unif-details">
-            <h4>V3 Male Edition</h4>
-            <p>Perpaduan Obsidian Dark, lis emas, Golden Mask, dan jubah Crimson Velvet, memancarkan takhta dan kepemimpinan tertinggi.</p>
-          </div>
-        </div>
-        <div class="unif-card">
-          <span class="gender-badge">♀ FEMALE</span>
-          <div class="img-wrapper">
-            <img id="img-v3-f" src="assets/images/unif3cewe.jpg" alt="V3 Female" class="unif-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div class="placeholder-img" style="display:none;">[Foto Unif V3 Cewek]</div>
-          </div>
-          <button class="btn-flip" onclick="toggleFlip('img-v3-f')">🔄 Hadap Kiri / Kanan</button>
-          <div class="unif-details">
-            <h4>V3 Female Edition</h4>
-            <p>Gaun kehormatan Obsidian berlapis emas murni dan aksen royal crimson.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- JS Khusus Halaman Uniform -->
-  <script>
-    function switchUniformVersion(version, e) {
-      const tabButtons = document.querySelectorAll('.v-tab-btn');
-      tabButtons.forEach(btn => btn.classList.remove('active'));
-      if (e && e.target) {
-        e.target.classList.add('active');
-      }
-
-      const contents = document.querySelectorAll('.version-content');
-      contents.forEach(content => content.classList.remove('active'));
-
-      const targetContent = document.getElementById('unif-' + version + '-content');
-      if (targetContent) {
-        targetContent.classList.add('active');
-      }
-    }
-
-    function toggleFlip(imageId) {
-      const img = document.getElementById(imageId);
-      if (img) {
-        img.classList.toggle('flipped');
-      }
-    }
-  </script>
-</div>
-
+        <!-- FOOTER -->
+        <footer>
+            <div class="footer-latin">Vantoria Nocturne Empire © All Rights Reserved</div>
+        </footer>
 
     </div>
 
     <!-- FLOATING BACK BUTTON -->
-    <button id="back-btn" class="btn-back-floating" onclick="closePages()">⬅ Kembali</button>
+    <button id="back-btn" class="btn-back-floating" onclick="closePages()">⬅️ Kembali</button>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- PROFILE MODAL POPUP -->
+    <div id="profile-modal-overlay" class="modal-overlay" onclick="closeProfileModal(event)">
+        <div class="profile-modal" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeProfileModal()">&times;</button>
+            <img src="logo.jpg" class="logo-placeholder" style="width: 80px; height: 80px; margin-bottom: 10px;" alt="Logo Empire">
+            <div id="modal-slot" class="profile-slot">SLOT #00</div>
+            <div id="modal-name" class="profile-name">Kosong</div>
+            <div id="modal-role" class="profile-role">Ksatria Nocturne</div>
+            <div id="modal-bio" class="profile-bio">"Belum ada deskripsi profil untuk ksatria di slot ini."</div>
+            <div id="modal-status" class="profile-status">Status: Tidak Aktif</div>
+        </div>
+    </div>
+    
+        <!-- JAVASCRIPT LOGIC -->
     <script>
-        // Quotes Berubah Saat Loading
-        const quotes = [
-            '"Memasuki Gerbang Kekaisaran Nocturne..."',
-            '"Mempersiapkan Titah & Hukum Empire..."',
-            '"Menyelaraskan Musik Kehormatan..."',
-            '"Menyambut Ksatria Baru Vantoria..."'
+        // Data Member yang sudah diurutkan berdasarkan Abjad (A - Z)
+        const memberList = [
+            { name: "Aden", id: "3345", role: "Anggota Squad", bio: "nonchalant", status: "Aktif" },
+            { name: "Andre", id: "6113", role: "Anggota Squad", bio: "si gone", status: "Aktif" },
+            { name: "Asha", id: "7609", role: "T-Editor I", bio: "suka nempel ke yuna", status: "Aktif" },
+            { name: "Carryne", id: "0575", role: "Anggota Squad", bio: "rame, baik, imut, lucu, gemas, sayang smw pony, cinta tanah air", status: "Aktif" },
+            { name: "Kage", id: "16224", role: "Staff II", bio: "asik", status: "Aktif" },
+            { name: "Kennedy", id: "7965", role: "Anggota Squad", bio: "ndomblong", status: "Aktif" },
+            { name: "Lionel", id: "6995", role: "Anggota Squad", bio: "kelinci hitam", status: "Aktif" },
+            { name: "Melody", id: "4661", role: "Anggota Squad", bio: "energetic hoho :3", status: "Aktif" },
+            { name: "Rii", id: "9541", role: "Anggota Squad", bio: "pndiam", status: "Aktif" },
+            { name: "Yuna", id: "50507", role: "Staff I", bio: "suka deket sama asa", status: "Aktif" }
         ];
-        let quoteIndex = 0;
-        const quoteEl = document.getElementById('loading-quote');
 
-        const quoteInterval = setInterval(() => {
-            quoteIndex = (quoteIndex + 1) % quotes.length;
-            if(quoteEl) {
-                quoteEl.style.opacity = '0';
-                setTimeout(() => {
-                    quoteEl.textContent = quotes[quoteIndex];
-                    quoteEl.style.opacity = '1';
-                }, 300);
-            }
-        }, 1200);
-
-        // Anti-Stuck Timer Loading Page & Zoom-Fade Out Animation
-        function finishLoading() {
-            clearInterval(quoteInterval);
-            const loader = document.getElementById('loader-wrapper');
-            const content = document.getElementById('main-content');
-            
-            // Tambahkan class animasi zoom out & fade out
-            loader.classList.add('fade-zoom');
-            content.classList.add('loaded');
-        }
-
-        // Eksekusi tepat 5 detik tanpa peduli file eksternal belum kelar
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(finishLoading, 5000);
-
-            // Generate 41 Member Slots
-            const memberGrid = document.getElementById('member-grid');
-            for (let i = 1; i <= 41; i++) {
-                const card = document.createElement('div');
-                card.className = 'member-card';
-                card.innerHTML = `
-                    <div class="member-no">MEMBER #${i}</div>
-                    <div class="member-name">Menyusul</div>
-                `;
-                memberGrid.appendChild(card);
-            }
-
-            // BGM Play Bypasser
-            const audio = document.getElementById('bgm-player');
-            document.body.addEventListener('click', function() {
-                if (audio.paused) {
-                    audio.play().catch(() => {});
+        document.addEventListener("DOMContentLoaded", () => {
+            // Render Hall of Fame -> COMING SOON
+            const hofGrid = document.getElementById("hof-grid");
+            if(hofGrid) {
+                for (let i = 1; i <= 3; i++) {
+                    const data = { 
+                        name: "Coming Soon", 
+                        id: "", 
+                        role: "Hall of Fame", 
+                        bio: "Slot kehormatan ini akan segera hadir.", 
+                        status: "Coming Soon" 
+                    };
+                    
+                    const card = document.createElement("div");
+                    card.className = "hof-card";
+                    card.onclick = () => showProfileModal(data);
+                    card.innerHTML = `
+                        <div class="member-name" style="color: var(--gold-light); font-weight: bold; font-style: italic;">✨ Coming Soon ✨</div>
+                    `;
+                    hofGrid.appendChild(card);
                 }
-            }, { once: true });
+            }
+
+            // Render Members
+            const memberGrid = document.getElementById("member-grid");
+            if(memberGrid) {
+                for (let i = 4; i <= 40; i++) {
+                    const memberIndex = i - 4; // Index array dari data member (mulai slot 4 = index 0)
+                    let data;
+
+                    if (memberIndex < memberList.length) {
+                        const m = memberList[memberIndex];
+                        data = {
+                            name: `${m.name} (${m.id})`,
+                            id: m.id,
+                            role: m.role,
+                            bio: m.bio,
+                            status: m.status
+                        };
+                    } else {
+                        data = { 
+                            name: "Kosong", 
+                            id: "", 
+                            role: "Anggota Squad", 
+                            bio: "Slot anggota ini masih terbuka.", 
+                            status: "Vacant" 
+                        };
+                    }
+
+                    const card = document.createElement("div");
+                    card.className = "member-card";
+                    card.onclick = () => showProfileModal(data);
+                    card.innerHTML = `
+                        <div class="member-name">${data.name}</div>
+                    `;
+                    memberGrid.appendChild(card);
+                }
+            }
+
+            // Hilangkan loader dalam 2 detik
+            setTimeout(() => {
+                const loader = document.getElementById("loader-wrapper");
+                if(loader) {
+                    loader.classList.add("fade-zoom");
+                }
+            }, 2000);
         });
 
-        // Tab & Page Navigation System
+        function showProfileModal(data) {
+            document.getElementById("modal-slot").style.display = "none"; // Menyembunyikan elemen slot
+            document.getElementById("modal-name").textContent = data.name;
+            document.getElementById("modal-role").textContent = data.role || "Anggota SQ";
+            document.getElementById("modal-bio").textContent = `"${data.bio || 'Belum ada deskripsi profil.'}"`;
+            document.getElementById("modal-status").textContent = `Status: ${data.status || 'Aktif'}`;
+            
+            document.getElementById("profile-modal-overlay").classList.add("active");
+        }
+
+        function closeProfileModal(e) {
+            document.getElementById("profile-modal-overlay").classList.remove("active");
+        }
+
         function openPage(pageId) {
             document.getElementById('main-rules-page').style.display = 'none';
             
@@ -932,7 +1026,7 @@
             document.getElementById(pageId).classList.add('active');
             document.getElementById('back-btn').style.display = 'block';
 
-            window.scrollTo({ top: 300, behavior: 'smooth' });
+            window.scrollTo({ top: 200, behavior: 'smooth' });
         }
 
         function closePages() {
@@ -945,7 +1039,17 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Change BGM Track
+        function switchUnifVersion(version, btn) {
+            const tabBtns = document.querySelectorAll('.v-tab-btn');
+            tabBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const versionContents = document.querySelectorAll('.version-content');
+            versionContents.forEach(c => c.classList.remove('active'));
+
+            document.getElementById(`unif-${version}`).classList.add('active');
+        }
+
         function changeTrack(trackSrc, btn) {
             const player = document.getElementById('bgm-player');
             const buttons = document.querySelectorAll('.btn-track');
